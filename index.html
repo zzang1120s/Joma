@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <!-- ⚠️ 주의사항 안내 박스 (가시성/시인성 개선) -->
+    <!-- ⚠️ 주의사항 안내 박스 -->
     <div class="bg-amber-50 border border-amber-300/80 rounded-xl p-4 md:p-5 flex items-center gap-3.5 text-slate-800 text-sm md:text-base shadow-sm">
       <span class="text-2xl shrink-0 leading-none">📢</span>
       <div class="leading-relaxed">
@@ -114,20 +114,21 @@
       </div>
     </section>
 
-    <!-- 카테고리 2: 출석 & 공성 관리 -->
+    <!-- 카테고리 2: 출석 & 공성 관리 (구글 폼 모달 열기 적용) -->
     <section class="space-y-4">
       <h2 class="text-lg font-bold text-slate-800 border-l-4 border-amber-500 pl-3 flex items-center gap-2">
         <span>📅</span> Attendance & Siege Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        <a href="https://forms.gle/tr7efn8AtNcjigB8A" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
+        <!-- Submit Attendance (모달 창) -->
+        <div onclick="openFormModal('Submit Attendance', 'https://forms.gle/tr7efn8AtNcjigB8A')" class="cursor-pointer card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Submit Attendance</div>
             <div data-i18n="att_submit" class="text-xs text-slate-500 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📝</span>
-        </a>
+        </div>
 
         <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
@@ -137,13 +138,14 @@
           <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
         </a>
 
-        <a href="https://forms.gle/HHEoWFk9pUtEyy7F6" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
+        <!-- Add Siege Point (Joma) (모달 창) -->
+        <div onclick="openFormModal('Add Siege Point (Joma)', 'https://forms.gle/HHEoWFk9pUtEyy7F6')" class="cursor-pointer card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Add Siege Point (Joma)</div>
             <div data-i18n="siege_add" class="text-xs text-slate-500 mt-1">공성 포인트 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏰</span>
-        </a>
+        </div>
 
         <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
@@ -218,6 +220,29 @@
 
   </div>
 
+
+  <!-- 3️⃣ 구글 폼 모달(팝업) 레이어 -->
+  <div id="formModal" onclick="closeFormModalOnBackdrop(event)" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-3 md:p-6">
+    <div class="bg-white rounded-2xl w-full max-w-3xl h-[88vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      
+      <!-- 모달 상단 헤더 -->
+      <div class="flex justify-between items-center px-5 py-3.5 bg-slate-100 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📝</span>
+          <h3 id="modalTitle" class="font-bold text-slate-800 text-sm md:text-base">구글 폼</h3>
+        </div>
+        <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-700 font-bold text-xl px-2 py-0.5 rounded-lg hover:bg-slate-200/60 transition">✕</button>
+      </div>
+
+      <!-- 구글 폼 로딩 영역 -->
+      <div class="relative flex-1 bg-slate-50">
+        <iframe id="formIframe" src="" class="w-full h-full border-0"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+
   <script>
     const BANNER_IMAGE = 'banner_Image.jpg'; 
     document.getElementById('bgImg').src = BANNER_IMAGE;
@@ -228,7 +253,36 @@
       document.getElementById('mainDashboard').classList.remove('hidden');
     }
 
-    // 🌐 언어별 데이터 사전 (강조 뱃지 디자인 적용)
+    // 🌐 구글 폼 모달 열기 함수
+    function openFormModal(title, formUrl) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('formIframe').src = formUrl;
+      document.getElementById('formModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    }
+
+    // 🌐 구글 폼 모달 닫기 함수
+    function closeFormModal() {
+      document.getElementById('formModal').classList.add('hidden');
+      document.getElementById('formIframe').src = '';
+      document.body.style.overflow = 'auto'; // 배경 스크롤 재개
+    }
+
+    // 배경 클릭 시 모달 닫기
+    function closeFormModalOnBackdrop(event) {
+      if (event.target.id === 'formModal') {
+        closeFormModal();
+      }
+    }
+
+    // ESC 키 입력 시 모달 닫기
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFormModal();
+      }
+    });
+
+    // 🌐 언어별 데이터 사전
     const i18nData = {
       kor: {
         subtitle: "길드 운영 및 출석체크 주요 링크 모음",
