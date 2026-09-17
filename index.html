@@ -15,7 +15,7 @@
   <!-- 1️⃣ 대문 (랜딩) 화면 - 접속 시 첫 화면 -->
   <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-950">
     <!-- 배경 이미지 -->
-    <img id="bgImg" src="배너.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
+    <img id="bgImg" src="banner_Image.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
     
     <!-- 어두운 그라데이션 오버레이 -->
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80"></div>
@@ -113,14 +113,14 @@
   <script>
     // 💡 저장한 대문 이미지 파일명 (깃허브에 올린 파일명과 일치해야 함)
     // 외부 링크를 쓰실 경우 'https://...' 전체 주소를 넣으시면 됩니다.
-    const 배너_IMAGE = '배너.jpg'; 
+    const banner_Image_IMAGE = 'banner_Image.jpg'; 
 
     // 구글 시트 ID 설정
     const SHEET_ID = '1Z7HPi4PCCG1ejB-Wtcjqr4FjPvmHpMnFS4xb3WZ-TNs';
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
     // 이미지 경로 설정
-    document.getElementById('bgImg').src = 배너_IMAGE;
+    document.getElementById('bgImg').src = banner_Image_IMAGE;
 
     // 대문 -> 메인 이동 함수
     function goToMain() {
