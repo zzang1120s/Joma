@@ -3,45 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>길드 정산 & 패널티 현황판</title>
+  <title>길드 포털</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <style>
     body { background-color: #0f172a; color: #f8fafc; }
   </style>
 </head>
-<body class="p-6">
-  <div class="max-w-6xl mx-auto space-y-6">
+<body>
+
+  <!-- 1️⃣ 대문 (랜딩) 화면 - 접속 시 첫 화면 -->
+  <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-950">
+    <!-- 배경 이미지 -->
+    <img id="bgImg" src="banner.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
     
-<!-- 🖼️ 대문 이미지 & 히어로 섹션 -->
-<div class="relative overflow-hidden rounded-2xl bg-slate-800 border border-slate-700 shadow-2xl">
-  <!-- 배경 이미지 & 어두운 오버레이 레이어 -->
-  <div class="absolute inset-0 z-0">
-    <!-- 💡 이미지 파일명 또는 외부 링크 주소를 src="" 안에 입력하세요 -->
-    <img src="banner.jpg" alt="길드 대표 이미지" class="w-full h-full object-cover opacity-35">
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+    <!-- 어두운 그라데이션 오버레이 -->
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80"></div>
+
+    <!-- 대문 문구 & 안내 -->
+    <div class="relative z-10 text-center px-4 space-y-6 animate-pulse">
+      <span class="px-4 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-full text-xs font-bold tracking-widest uppercase">
+        Guild Official Portal
+      </span>
+      <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-lg">
+        ⚔️ 길드 정산 포털
+      </h1>
+      <p class="text-slate-300 text-sm md:text-lg max-w-md mx-auto">
+        화면 아무 곳이나 클릭하여 메인 페이지로 이동하세요
+      </p>
+      <div class="pt-4">
+        <span class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-slate-950 font-bold rounded-full text-sm shadow-xl">
+          👉 메인 화면 입장하기
+        </span>
+      </div>
+    </div>
   </div>
 
-  <!-- 메인 텍스트 및 버튼 컨텐츠 -->
-  <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
-    <div class="space-y-3">
-      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full text-xs font-bold tracking-wider uppercase">
-        Guild Management Portal
-      </span>
-      <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
-        ⚔️ 우리 길드 정산 포털
-      </h1>
-      <p class="text-slate-300 max-w-xl text-sm md:text-base leading-relaxed">
-        보스 레이드 출석체크, 실시간 정산 원장, 미정산 패널티 현황을 한눈에 확인하세요.
-      </p>
-    </div>
+
+  <!-- 2️⃣ 메인 대시보드 화면 (초기에는 숨김 상태) -->
+  <div id="mainDashboard" class="hidden p-6 max-w-6xl mx-auto space-y-6">
     
-    <!-- 새로고침 버튼 -->
-    <button onclick="fetchData()" class="px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-sm transition shadow-lg flex items-center gap-2 whitespace-nowrap">
-      <span>🔄</span> 데이터 새로고침
-    </button>
-  </div>
-</div>
+    <!-- 대시보드 상단 헤더 -->
+    <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-amber-400">⚔️ 길드 정산 & 패널티 대시보드</h1>
+        <p class="text-sm text-slate-400 mt-1">구글 시트 실시간 연동 현황</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="goToLanding()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg text-xs font-medium transition">
+          🖼️ 대문으로
+        </button>
+        <button onclick="fetchData()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-lg text-sm transition">
+          🔄 새로고침
+        </button>
+      </div>
+    </div>
 
     <!-- 요약 카운터 카드 -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -95,12 +111,31 @@
   </div>
 
   <script>
-    // 현재 구글 시트 ID 설정
+    // 💡 저장한 대문 이미지 파일명 (깃허브에 올린 파일명과 일치해야 함)
+    // 외부 링크를 쓰실 경우 'https://...' 전체 주소를 넣으시면 됩니다.
+    const BANNER_IMAGE = 'banner.jpg'; 
+
+    // 구글 시트 ID 설정
     const SHEET_ID = '1Z7HPi4PCCG1ejB-Wtcjqr4FjPvmHpMnFS4xb3WZ-TNs';
-    
-    // 시트 데이터를 CSV 형식으로 가져오는 URL
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
+    // 이미지 경로 설정
+    document.getElementById('bgImg').src = BANNER_IMAGE;
+
+    // 대문 -> 메인 이동 함수
+    function goToMain() {
+      document.getElementById('landingScreen').classList.add('hidden');
+      document.getElementById('mainDashboard').classList.remove('hidden');
+      fetchData(); // 메인 진입 시 데이터 로드
+    }
+
+    // 메인 -> 대문 이동 함수
+    function goToLanding() {
+      document.getElementById('mainDashboard').classList.add('hidden');
+      document.getElementById('landingScreen').classList.remove('hidden');
+    }
+
+    // 시트 데이터 수집 함수
     async function fetchData() {
       try {
         const response = await fetch(CSV_URL);
@@ -115,20 +150,16 @@
         });
       } catch (error) {
         console.error('시트 데이터 로드 실패:', error);
-        document.getElementById('sheetTableBody').innerHTML = `
-          <tr><td colspan="5" class="py-6 text-center text-rose-400">시트 데이터를 불러오지 못했습니다. 구글 시트 웹 공개 여부를 확인해주세요.</td></tr>
-        `;
       }
     }
 
+    // 시트 데이터 출력 함수
     function renderData(data) {
       const tableBody = document.getElementById('sheetTableBody');
       tableBody.innerHTML = '';
-
       let unsettledTotal = 0;
 
       data.forEach(row => {
-        // 시트의 컬럼명에 맞게 필드값 추출 (시트 헤더 이름에 따라 수정 가능)
         const date = row['날짜'] || row['일자'] || Object.values(row)[0] || '-';
         const boss = row['보스'] || row['보스이름'] || Object.values(row)[1] || '-';
         const user = row['유저명'] || row['유저'] || Object.values(row)[2] || '-';
@@ -157,18 +188,15 @@
         tableBody.appendChild(tr);
       });
 
-      // 카운터 업데이트
       document.getElementById('unsettledCount').innerText = `${unsettledTotal} 건`;
       document.getElementById('lastUpdated').innerText = new Date().toLocaleTimeString('ko-KR');
 
-      // 패널티 목록 예시 출력 (시트 연동 또는 고정 출력)
       renderPenalties(['grok', 'm', 'EJ', 'Rookie', 'Aim', 'Luvsoul']);
     }
 
     function renderPenalties(penaltyList) {
       const container = document.getElementById('penaltyContainer');
       container.innerHTML = '';
-      
       document.getElementById('penaltyCount').innerText = `${penaltyList.length} 명`;
 
       penaltyList.forEach(name => {
@@ -178,9 +206,6 @@
         container.appendChild(badge);
       });
     }
-
-    // 초기 실행
-    fetchData();
   </script>
 </body>
 </html>
