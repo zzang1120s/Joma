@@ -6,7 +6,7 @@
   <title>【 Joma & UFC 】 Official Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background-color: #0f172a; color: #f8fafc; }
+    body { background-color: #f8fafc; color: #0f172a; }
     .card-hover { transition: all 0.2s ease-in-out; }
     .card-hover:hover { transform: translateY(-3px); }
   </style>
@@ -14,12 +14,12 @@
 <body>
 
   <!-- 1️⃣ 대문 (랜딩) 화면 -->
-  <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-950">
-    <img id="bgImg" src="banner_Image.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80"></div>
+  <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-900">
+    <img id="bgImg" src="banner_Image.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-40 transition-transform duration-700 hover:scale-105">
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-950/80"></div>
 
     <div class="relative z-10 text-center px-4 space-y-6 animate-pulse">
-      <span class="px-4 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-full text-xs font-bold tracking-widest uppercase">
+      <span class="px-4 py-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full text-xs font-bold tracking-widest uppercase">
         Guild Official Portal
       </span>
       <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-lg">
@@ -29,7 +29,7 @@
         Click anywhere on the screen to enter the portal
       </p>
       <div class="pt-4">
-        <span class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-slate-950 font-bold rounded-full text-sm shadow-xl">
+        <span class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-slate-950 font-bold rounded-full text-sm shadow-xl hover:bg-amber-400 transition">
           👉 Enter Guild Portal
         </span>
       </div>
@@ -41,53 +41,53 @@
   <div id="mainDashboard" class="hidden p-4 md:p-8 max-w-6xl mx-auto space-y-8">
     
     <!-- 상단 헤더 -->
-    <div class="flex justify-between items-center border-b border-slate-700 pb-5">
+    <div class="flex justify-between items-center border-b border-slate-200 pb-5">
       <div>
-        <h1 class="text-2xl md:text-3xl font-black text-amber-400 flex items-center gap-2">
-          ⚔️ Joma & UFC Link Hub
+        <h1 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2">
+          ⚔️ <span class="text-amber-600">Joma & UFC</span> Link Hub
         </h1>
-        <p class="text-xs md:text-sm text-slate-400 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
+        <p class="text-xs md:text-sm text-slate-500 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
       </div>
-      <button onclick="goToLanding()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition">
+      <button onclick="goToLanding()" class="px-4 py-2 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold shadow-sm transition">
         🖼️ 대문으로
       </button>
     </div>
 
     <!-- ⚠️ 주의사항 안내 박스 -->
-    <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-amber-300 text-sm">
+    <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-4 flex items-start gap-3 text-amber-900 text-sm shadow-sm">
       <span class="text-lg">📢</span>
       <div>
-        <strong class="font-bold text-amber-400">Attendance Notice:</strong> If you make a mistake on attendance, tell <span class="bg-amber-500/20 px-2 py-0.5 rounded text-amber-200 font-bold">"Sea"</span>. Don't check in twice!
+        <strong class="font-bold text-amber-700">Attendance Notice:</strong> If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don't check in twice!
       </div>
     </div>
 
     <!-- 카테고리 1: 운영 규칙 및 시스템 -->
     <section class="space-y-4">
-      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
         <span>📜</span> Rules & Operating Systems
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <a href="https://tinyurl.com/2y3us57m" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/2y3us57m" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-emerald-400 group-hover:text-emerald-300">Operational Rules</div>
-            <div class="text-xs text-slate-400 mt-1">길드 운영 규칙 및 기본 시스템</div>
+            <div class="font-bold text-emerald-700 group-hover:text-emerald-600">Operational Rules</div>
+            <div class="text-xs text-slate-500 mt-1">길드 운영 규칙 및 기본 시스템</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📖</span>
         </a>
 
-        <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-emerald-400">Inotia Split Rule</div>
-            <div class="text-xs text-slate-400 mt-1">Joma & MMA 이노티아 분배 규칙</div>
+            <div class="font-bold text-slate-800 group-hover:text-emerald-600">Inotia Split Rule</div>
+            <div class="text-xs text-slate-500 mt-1">Joma & MMA 이노티아 분배 규칙</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">⚖️</span>
         </a>
 
-        <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-emerald-400">Dice Requirements</div>
-            <div class="text-xs text-slate-400 mt-1">유니크 아이템 주사위 자격 조건</div>
+            <div class="font-bold text-slate-800 group-hover:text-emerald-600">Dice Requirements</div>
+            <div class="text-xs text-slate-500 mt-1">유니크 아이템 주사위 자격 조건</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎲</span>
         </a>
@@ -97,39 +97,39 @@
 
     <!-- 카테고리 2: 출석 & 공성 관리 -->
     <section class="space-y-4">
-      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-amber-500 pl-3 flex items-center gap-2">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-amber-500 pl-3 flex items-center gap-2">
         <span>📅</span> Attendance & Siege Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        <a href="https://forms.gle/tr7efn8AtNcjigB8A" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://forms.gle/tr7efn8AtNcjigB8A" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-amber-400 group-hover:text-amber-300">Submit Attendance</div>
-            <div class="text-xs text-slate-400 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
+            <div class="font-bold text-amber-700 group-hover:text-amber-600">Submit Attendance</div>
+            <div class="text-xs text-slate-500 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📝</span>
         </a>
 
-        <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-amber-400">Attendance Check</div>
-            <div class="text-xs text-slate-400 mt-1">현재까지의 출석 현황 확인</div>
+            <div class="font-bold text-slate-800 group-hover:text-amber-600">Attendance Check</div>
+            <div class="text-xs text-slate-500 mt-1">현재까지의 출석 현황 확인</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
         </a>
 
-        <a href="https://forms.gle/HHEoWFk9pUtEyy7F6" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://forms.gle/HHEoWFk9pUtEyy7F6" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-amber-400 group-hover:text-amber-300">Add Siege Point (Joma)</div>
-            <div class="text-xs text-slate-400 mt-1">공성 포인트 제출 (구글 폼)</div>
+            <div class="font-bold text-amber-700 group-hover:text-amber-600">Add Siege Point (Joma)</div>
+            <div class="text-xs text-slate-500 mt-1">공성 포인트 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏰</span>
         </a>
 
-        <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-amber-400">View Siege Point (Joma)</div>
-            <div class="text-xs text-slate-400 mt-1">공성 포인트 누적 현황 조회</div>
+            <div class="font-bold text-slate-800 group-hover:text-amber-600">View Siege Point (Joma)</div>
+            <div class="text-xs text-slate-500 mt-1">공성 포인트 누적 현황 조회</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📈</span>
         </a>
@@ -139,23 +139,23 @@
 
     <!-- 카테고리 3: 명단 및 적대 관리 -->
     <section class="space-y-4">
-      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-rose-500 pl-3 flex items-center gap-2">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-rose-500 pl-3 flex items-center gap-2">
         <span>⚔️</span> Roster & Enemy Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <a href="https://tinyurl.com/39ur6w9a" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/39ur6w9a" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-rose-400">Grade List</div>
-            <div class="text-xs text-slate-400 mt-1">길드원 계급 및 등급 명단</div>
+            <div class="font-bold text-slate-800 group-hover:text-rose-600">Grade List</div>
+            <div class="text-xs text-slate-500 mt-1">길드원 계급 및 등급 명단</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎖️</span>
         </a>
 
-        <a href="https://tinyurl.com/2s42m428" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/2s42m428" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-rose-400 group-hover:text-rose-300">KOS List</div>
-            <div class="text-xs text-slate-400 mt-1">Kill on Sight (적대 및 타겟 목록)</div>
+            <div class="font-bold text-rose-700 group-hover:text-rose-600">KOS List</div>
+            <div class="text-xs text-slate-500 mt-1">Kill on Sight (적대 및 타겟 목록)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">💀</span>
         </a>
@@ -165,31 +165,31 @@
 
     <!-- 카테고리 4: 재정 & 전리품 시세 -->
     <section class="space-y-4">
-      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-cyan-500 pl-3 flex items-center gap-2">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-cyan-600 pl-3 flex items-center gap-2">
         <span>💎</span> Economy & Loot Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-        <a href="https://tinyurl.com/5eszcac2" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/5eszcac2" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-cyan-400 group-hover:text-cyan-300">Bank Monitor</div>
-            <div class="text-xs text-slate-400 mt-1">길드 창고 및 자금 현황</div>
+            <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Bank Monitor</div>
+            <div class="text-xs text-slate-500 mt-1">길드 창고 및 자금 현황</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏦</span>
         </a>
 
-        <a href="https://tinyurl.com/4scd9597" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/4scd9597" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-cyan-400">Loot List</div>
-            <div class="text-xs text-slate-400 mt-1">획득 전리품 및 아이템 목록</div>
+            <div class="font-bold text-slate-800 group-hover:text-cyan-600">Loot List</div>
+            <div class="text-xs text-slate-500 mt-1">획득 전리품 및 아이템 목록</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📦</span>
         </a>
 
-        <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+        <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-200 group-hover:text-cyan-400">Item Price</div>
-            <div class="text-xs text-slate-400 mt-1">아이템 별 시세 기준표</div>
+            <div class="font-bold text-slate-800 group-hover:text-cyan-600">Item Price</div>
+            <div class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
         </a>
