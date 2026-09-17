@@ -15,7 +15,7 @@
 
   <!-- 1️⃣ 대문 (랜딩) 화면 -->
   <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-950">
-    <img id="bgImg" src="배너.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
+    <img id="bgImg" src="banner_Image.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80"></div>
 
     <div class="relative z-10 text-center px-4 space-y-6 animate-pulse">
@@ -200,7 +200,7 @@
   </div>
 
   <script>
-    const BANNER_IMAGE = '배너.jpg'; 
+    const BANNER_IMAGE = 'banner_Image.jpg'; 
 
     // 이미지 경로 설정
     document.getElementById('bgImg').src = BANNER_IMAGE;
