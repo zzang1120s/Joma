@@ -41,23 +41,27 @@
   <div id="mainDashboard" class="hidden p-4 md:p-8 max-w-6xl mx-auto space-y-8">
     
     <!-- 상단 헤더 -->
-    <div class="flex justify-between items-center border-b border-slate-200 pb-5">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
       <div>
         <h1 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2">
           ⚔️ <span class="text-amber-600">Joma & UFC</span> Link Hub
         </h1>
-        <p class="text-xs md:text-sm text-slate-500 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
+        <p id="sub-header" data-i18n="subtitle" class="text-xs md:text-sm text-slate-500 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
       </div>
-      <button onclick="goToLanding()" class="px-4 py-2 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold shadow-sm transition">
-        🖼️ 대문으로
-      </button>
+
+      <!-- 🌐 언어 선택 스위처 (ENG/KOR, PHP, IDN) -->
+      <div class="flex items-center bg-slate-200/80 p-1 rounded-xl border border-slate-300 text-xs font-bold shadow-inner">
+        <button onclick="setLang('kor')" id="btn-kor" class="lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow">ENG / KOR</button>
+        <button onclick="setLang('php')" id="btn-php" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">PHP</button>
+        <button onclick="setLang('idn')" id="btn-idn" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">IDN</button>
+      </div>
     </div>
 
     <!-- ⚠️ 주의사항 안내 박스 -->
     <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-4 flex items-start gap-3 text-amber-900 text-sm shadow-sm">
       <span class="text-lg">📢</span>
       <div>
-        <strong class="font-bold text-amber-700">Attendance Notice:</strong> If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don't check in twice!
+        <strong class="font-bold text-amber-700">Attendance Notice:</strong> <span data-i18n="notice">If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don't check in twice!</span>
       </div>
     </div>
 
@@ -71,7 +75,7 @@
         <a href="https://tinyurl.com/2y3us57m" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-emerald-700 group-hover:text-emerald-600">Operational Rules</div>
-            <div class="text-xs text-slate-500 mt-1">길드 운영 규칙 및 기본 시스템</div>
+            <div data-i18n="rule_op" class="text-xs text-slate-500 mt-1">길드 운영 규칙 및 기본 시스템</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📖</span>
         </a>
@@ -79,7 +83,7 @@
         <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-emerald-600">Inotia Split Rule</div>
-            <div class="text-xs text-slate-500 mt-1">Joma & MMA 이노티아 분배 규칙</div>
+            <div data-i18n="rule_inotia" class="text-xs text-slate-500 mt-1">Joma & MMA 이노티아 분배 규칙</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">⚖️</span>
         </a>
@@ -87,7 +91,7 @@
         <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-emerald-600">Dice Requirements</div>
-            <div class="text-xs text-slate-500 mt-1">유니크 아이템 주사위 자격 조건</div>
+            <div data-i18n="rule_dice" class="text-xs text-slate-500 mt-1">유니크 아이템 주사위 자격 조건</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎲</span>
         </a>
@@ -105,7 +109,7 @@
         <a href="https://forms.gle/tr7efn8AtNcjigB8A" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Submit Attendance</div>
-            <div class="text-xs text-slate-500 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
+            <div data-i18n="att_submit" class="text-xs text-slate-500 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📝</span>
         </a>
@@ -113,7 +117,7 @@
         <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-amber-600">Attendance Check</div>
-            <div class="text-xs text-slate-500 mt-1">현재까지의 출석 현황 확인</div>
+            <div data-i18n="att_check" class="text-xs text-slate-500 mt-1">현재까지의 출석 현황 확인</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
         </a>
@@ -121,7 +125,7 @@
         <a href="https://forms.gle/HHEoWFk9pUtEyy7F6" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Add Siege Point (Joma)</div>
-            <div class="text-xs text-slate-500 mt-1">공성 포인트 제출 (구글 폼)</div>
+            <div data-i18n="siege_add" class="text-xs text-slate-500 mt-1">공성 포인트 제출 (구글 폼)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏰</span>
         </a>
@@ -129,7 +133,7 @@
         <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-amber-600">View Siege Point (Joma)</div>
-            <div class="text-xs text-slate-500 mt-1">공성 포인트 누적 현황 조회</div>
+            <div data-i18n="siege_view" class="text-xs text-slate-500 mt-1">공성 포인트 누적 현황 조회</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📈</span>
         </a>
@@ -147,7 +151,7 @@
         <a href="https://tinyurl.com/39ur6w9a" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-rose-600">Grade List</div>
-            <div class="text-xs text-slate-500 mt-1">길드원 계급 및 등급 명단</div>
+            <div data-i18n="rst_grade" class="text-xs text-slate-500 mt-1">길드원 계급 및 등급 명단</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎖️</span>
         </a>
@@ -155,7 +159,7 @@
         <a href="https://tinyurl.com/2s42m428" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-rose-700 group-hover:text-rose-600">KOS List</div>
-            <div class="text-xs text-slate-500 mt-1">Kill on Sight (적대 및 타겟 목록)</div>
+            <div data-i18n="rst_kos" class="text-xs text-slate-500 mt-1">Kill on Sight (적대 및 타겟 목록)</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">💀</span>
         </a>
@@ -173,7 +177,7 @@
         <a href="https://tinyurl.com/5eszcac2" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Bank Monitor</div>
-            <div class="text-xs text-slate-500 mt-1">길드 창고 및 자금 현황</div>
+            <div data-i18n="ecn_bank" class="text-xs text-slate-500 mt-1">길드 창고 및 자금 현황</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏦</span>
         </a>
@@ -181,7 +185,7 @@
         <a href="https://tinyurl.com/4scd9597" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-cyan-600">Loot List</div>
-            <div class="text-xs text-slate-500 mt-1">획득 전리품 및 아이템 목록</div>
+            <div data-i18n="ecn_loot" class="text-xs text-slate-500 mt-1">획득 전리품 및 아이템 목록</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📦</span>
         </a>
@@ -189,7 +193,7 @@
         <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-cyan-600">Item Price</div>
-            <div class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
+            <div data-i18n="ecn_price" class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
         </a>
@@ -201,19 +205,90 @@
 
   <script>
     const BANNER_IMAGE = 'banner_Image.jpg'; 
-
-    // 이미지 경로 설정
     document.getElementById('bgImg').src = BANNER_IMAGE;
 
-    // 화면 전환 함수
     function goToMain() {
       document.getElementById('landingScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
     }
 
-    function goToLanding() {
-      document.getElementById('mainDashboard').classList.add('hidden');
-      document.getElementById('landingScreen').classList.remove('hidden');
+    // 🌐 언어별 데이터 사전
+    const i18nData = {
+      kor: {
+        subtitle: "길드 운영 및 출석체크 주요 링크 모음",
+        notice: 'If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don\'t check in twice!',
+        rule_op: "길드 운영 규칙 및 기본 시스템",
+        rule_inotia: "Joma & MMA 이노티아 분배 규칙",
+        rule_dice: "유니크 아이템 주사위 자격 조건",
+        att_submit: "보스 참여 후 출석체크 제출 (구글 폼)",
+        att_check: "현재까지의 출석 현황 확인",
+        siege_add: "공성 포인트 제출 (구글 폼)",
+        siege_view: "공성 포인트 누적 현황 조회",
+        rst_grade: "길드원 계급 및 등급 명단",
+        rst_kos: "Kill on Sight (적대 및 타겟 목록)",
+        ecn_bank: "길드 창고 및 자금 현황",
+        ecn_loot: "획득 전리품 및 아이템 목록",
+        ecn_price: "아이템 별 시세 기준표"
+      },
+      php: {
+        subtitle: "Mga pangunahing link para sa guild operation at attendance",
+        notice: 'Kung nagkamali sa attendance, sabihin kay <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Huwag mag-check in nang dalawang beses!',
+        rule_op: "Mga tuntunin sa guild at batayang sistema",
+        rule_inotia: "Mga tuntunin sa paghahati ng Inotia (Joma & MMA)",
+        rule_dice: "Mga kwalipikasyon sa dice roll para sa Unique Item",
+        att_submit: "Mag-submit ng attendance pagkatapos ng boss (Google Form)",
+        att_check: "Tingnan ang kasalukuyang status ng attendance",
+        siege_add: "Mag-submit ng Siege Point (Google Form)",
+        siege_view: "Tingnan ang kabuuang Siege Points",
+        rst_grade: "Listahan ng rank at antas ng mga miyembro",
+        rst_kos: "Kill on Sight (Listahan ng mga kaaway at target)",
+        ecn_bank: "Status ng guild bank at pondo",
+        ecn_loot: "Listahan ng mga nakuhang loot at gamit",
+        ecn_price: "Talahanayan ng presyo ng mga item"
+      },
+      idn: {
+        subtitle: "Kumpulan tautan utama untuk operasional guild & kehadiran",
+        notice: 'Jika terjadi kesalahan absensi, hubungi <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Jangan absen dua kali!',
+        rule_op: "Aturan operasional guild & sistem dasar",
+        rule_inotia: "Aturan pembagian Inotia Joma & MMA",
+        rule_dice: "Syarat kualifikasi dadu untuk Item Unik",
+        att_submit: "Kirim absensi setelah partisipasi boss (Google Form)",
+        att_check: "Cek status kehadiran saat ini",
+        siege_add: "Kirim Poin Siege (Google Form)",
+        siege_view: "Lihat akumulasi Poin Siege",
+        rst_grade: "Daftar pangkat & tingkatan anggota guild",
+        rst_kos: "Kill on Sight (Daftar musuh & target)",
+        ecn_bank: "Status gudang & dana guild",
+        ecn_loot: "Daftar item & hasil jarahan",
+        ecn_price: "Tabel standar harga item"
+      }
+    };
+
+    // 언어 변경 함수
+    function setLang(lang) {
+      // 1. 모든 data-i18n 요소 텍스트 변경
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18nData[lang] && i18nData[lang][key]) {
+          el.innerHTML = i18nData[lang][key];
+        }
+      });
+
+      // 2. 버튼 활성화 스타일 전환
+      const buttons = {
+        kor: document.getElementById('btn-kor'),
+        php: document.getElementById('btn-php'),
+        idn: document.getElementById('btn-idn')
+      };
+
+      Object.keys(buttons).forEach(key => {
+        if (key === lang) {
+          buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow";
+        } else {
+          buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900";
+        }
+      });
     }
   </script>
 </body>
