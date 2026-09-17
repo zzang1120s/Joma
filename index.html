@@ -1,0 +1,168 @@
+HTML
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>길드 정산 & 패널티 현황판</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <style>
+    body { background-color: #0f172a; color: #f8fafc; }
+  </style>
+</head>
+<body class="p-6">
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- 헤더 -->
+    <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-amber-400">⚔️ 길드 정산 & 패널티 대시보드</h1>
+        <p class="text-sm text-slate-400 mt-1">구글 시트 실시간 연동 현황</p>
+      </div>
+      <button onclick="fetchData()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-lg text-sm transition">
+        🔄 새로고침
+      </button>
+    </div>
+
+    <!-- 요약 카운터 카드 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+        <span class="text-xs text-slate-400 font-medium">미정산 항목</span>
+        <div id="unsettledCount" class="text-2xl font-bold text-amber-400 mt-1">- 건</div>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+        <span class="text-xs text-slate-400 font-medium">패널티 대상자</span>
+        <div id="penaltyCount" class="text-2xl font-bold text-rose-400 mt-1">- 명</div>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+        <span class="text-xs text-slate-400 font-medium">최종 업데이트</span>
+        <div id="lastUpdated" class="text-sm font-semibold text-slate-300 mt-2">-</div>
+      </div>
+    </div>
+
+    <!-- 패널티 명단 섹션 -->
+    <div class="bg-slate-800 border border-rose-900/50 rounded-xl p-5">
+      <h2 class="text-lg font-bold text-rose-400 mb-3 flex items-center gap-2">
+        <span>🚨</span> 패널티 대상자 목록 (~9월 20일 마감)
+      </h2>
+      <div id="penaltyContainer" class="flex flex-wrap gap-2">
+        <span class="text-sm text-slate-500">데이터를 불러오는 중...</span>
+      </div>
+    </div>
+
+    <!-- 정산 현황 테이블 -->
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+      <h2 class="text-lg font-bold text-amber-400 mb-4">📋 실시간 출석 및 정산 원장</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-slate-300">
+          <thead class="text-xs text-slate-400 uppercase bg-slate-900/60 border-b border-slate-700">
+            <tr>
+              <th class="py-3 px-4">날짜</th>
+              <th class="py-3 px-4">보스명</th>
+              <th class="py-3 px-4">참여 유저</th>
+              <th class="py-3 px-4">수량</th>
+              <th class="py-3 px-4">정산 상태</th>
+            </tr>
+          </thead>
+          <tbody id="sheetTableBody" class="divide-y divide-slate-700">
+            <tr>
+              <td colspan="5" class="py-6 text-center text-slate-500">데이터를 로딩 중입니다...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 현재 구글 시트 ID 설정
+    const SHEET_ID = '1Z7HPi4PCCG1ejB-Wtcjqr4FjPvmHpMnFS4xb3WZ-TNs';
+    
+    // 시트 데이터를 CSV 형식으로 가져오는 URL
+    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
+    async function fetchData() {
+      try {
+        const response = await fetch(CSV_URL);
+        const csvText = await response.text();
+
+        Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+            renderData(results.data);
+          }
+        });
+      } catch (error) {
+        console.error('시트 데이터 로드 실패:', error);
+        document.getElementById('sheetTableBody').innerHTML = `
+          <tr><td colspan="5" class="py-6 text-center text-rose-400">시트 데이터를 불러오지 못했습니다. 구글 시트 웹 공개 여부를 확인해주세요.</td></tr>
+        `;
+      }
+    }
+
+    function renderData(data) {
+      const tableBody = document.getElementById('sheetTableBody');
+      tableBody.innerHTML = '';
+
+      let unsettledTotal = 0;
+
+      data.forEach(row => {
+        // 시트의 컬럼명에 맞게 필드값 추출 (시트 헤더 이름에 따라 수정 가능)
+        const date = row['날짜'] || row['일자'] || Object.values(row)[0] || '-';
+        const boss = row['보스'] || row['보스이름'] || Object.values(row)[1] || '-';
+        const user = row['유저명'] || row['유저'] || Object.values(row)[2] || '-';
+        const qty = row['개수'] || row['수량'] || Object.values(row)[3] || '-';
+        const status = row['정산상태'] || row['상태'] || '미정산';
+
+        if (status.includes('미정산')) unsettledTotal++;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-700/50 transition';
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono text-xs text-slate-400">${date}</td>
+          <td class="py-3 px-4 font-semibold text-slate-200">${boss}</td>
+          <td class="py-3 px-4 text-slate-300">${user}</td>
+          <td class="py-3 px-4">${qty}</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 rounded text-xs font-semibold ${
+              status.includes('완료') 
+                ? 'bg-emerald-900/60 text-emerald-400 border border-emerald-700' 
+                : 'bg-amber-900/60 text-amber-400 border border-amber-700'
+            }">
+              ${status}
+            </span>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      // 카운터 업데이트
+      document.getElementById('unsettledCount').innerText = `${unsettledTotal} 건`;
+      document.getElementById('lastUpdated').innerText = new Date().toLocaleTimeString('ko-KR');
+
+      // 패널티 목록 예시 출력 (시트 연동 또는 고정 출력)
+      renderPenalties(['grok', 'm', 'EJ', 'Rookie', 'Aim', 'Luvsoul']);
+    }
+
+    function renderPenalties(penaltyList) {
+      const container = document.getElementById('penaltyContainer');
+      container.innerHTML = '';
+      
+      document.getElementById('penaltyCount').innerText = `${penaltyList.length} 명`;
+
+      penaltyList.forEach(name => {
+        const badge = document.createElement('span');
+        badge.className = 'px-3 py-1 bg-rose-950/80 border border-rose-800 text-rose-300 rounded-full text-xs font-medium';
+        badge.innerText = `⚠️ ${name}`;
+        container.appendChild(badge);
+      });
+    }
+
+    // 초기 실행
+    fetchData();
+  </script>
+</body>
+</html>
