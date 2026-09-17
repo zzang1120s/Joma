@@ -3,208 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>【 Joma & UFC 】</title>
+  <title>【 Joma & UFC 】 Official Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <style>
     body { background-color: #0f172a; color: #f8fafc; }
+    .card-hover { transition: all 0.2s ease-in-out; }
+    .card-hover:hover { transform: translateY(-3px); }
   </style>
 </head>
 <body>
 
-  <!-- 1️⃣ 대문 (랜딩) 화면 - 접속 시 첫 화면 -->
+  <!-- 1️⃣ 대문 (랜딩) 화면 -->
   <div id="landingScreen" onclick="goToMain()" class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-slate-950">
-    <!-- 배경 이미지 -->
-    <img id="bgImg" src="banner_Image.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
-    
-    <!-- 어두운 그라데이션 오버레이 -->
+    <img id="bgImg" src="배너.jpg" alt="대문 이미지" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 hover:scale-105">
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80"></div>
 
-    <!-- 대문 문구 & 안내 -->
     <div class="relative z-10 text-center px-4 space-y-6 animate-pulse">
       <span class="px-4 py-1.5 bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-full text-xs font-bold tracking-widest uppercase">
         Guild Official Portal
       </span>
       <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-lg">
-        ⚔️ Joma & Ufc ⚔️
+        ⚔️ Joma & UFC ⚔️
       </h1>
       <p class="text-slate-300 text-sm md:text-lg max-w-md mx-auto">
-        Click anywhere on the screen to go to the main page
+        Click anywhere on the screen to enter the portal
       </p>
       <div class="pt-4">
         <span class="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-slate-950 font-bold rounded-full text-sm shadow-xl">
-          👉 Enter the main screen
+          👉 길드 포털 입장하기
         </span>
       </div>
     </div>
   </div>
 
 
-  <!-- 2️⃣ 메인 대시보드 화면 (초기에는 숨김 상태) -->
-  <div id="mainDashboard" class="hidden p-6 max-w-6xl mx-auto space-y-6">
+  <!-- 2️⃣ 메인 링크 포털 화면 -->
+  <div id="mainDashboard" class="hidden p-4 md:p-8 max-w-6xl mx-auto space-y-8">
     
-    <!-- 대시보드 상단 헤더 -->
-    <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+    <!-- 상단 헤더 -->
+    <div class="flex justify-between items-center border-b border-slate-700 pb-5">
       <div>
-        <h1 class="text-2xl font-bold text-amber-400">⚔️ 길드 정산 & 패널티 대시보드</h1>
-        <p class="text-sm text-slate-400 mt-1">구글 시트 실시간 연동 현황</p>
+        <h1 class="text-2xl md:text-3xl font-black text-amber-400 flex items-center gap-2">
+          ⚔️ Joma & UFC Link Hub
+        </h1>
+        <p class="text-xs md:text-sm text-slate-400 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
       </div>
-      <div class="flex gap-2">
-        <button onclick="goToLanding()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg text-xs font-medium transition">
-          🖼️ 대문으로
-        </button>
-        <button onclick="fetchData()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-lg text-sm transition">
-          🔄 새로고침
-        </button>
+      <button onclick="goToLanding()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition">
+        🖼️ 대문으로
+      </button>
+    </div>
+
+    <!-- ⚠️ 주의사항 안내 박스 -->
+    <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-amber-300 text-sm">
+      <span class="text-lg">📢</span>
+      <div>
+        <strong class="font-bold text-amber-400">Attendance Notice:</strong> If you make a mistake on attendance, tell <span class="bg-amber-500/20 px-2 py-0.5 rounded text-amber-200 font-bold">"Angel"</span>. Don't check in twice!
       </div>
     </div>
 
-    <!-- 요약 카운터 카드 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
-        <span class="text-xs text-slate-400 font-medium">미정산 항목</span>
-        <div id="unsettledCount" class="text-2xl font-bold text-amber-400 mt-1">- 건</div>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
-        <span class="text-xs text-slate-400 font-medium">패널티 대상자</span>
-        <div id="penaltyCount" class="text-2xl font-bold text-rose-400 mt-1">- 명</div>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
-        <span class="text-xs text-slate-400 font-medium">최종 업데이트</span>
-        <div id="lastUpdated" class="text-sm font-semibold text-slate-300 mt-2">-</div>
-      </div>
-    </div>
-
-    <!-- 패널티 명단 섹션 -->
-    <div class="bg-slate-800 border border-rose-900/50 rounded-xl p-5">
-      <h2 class="text-lg font-bold text-rose-400 mb-3 flex items-center gap-2">
-        <span>🚨</span> 패널티 대상자 목록 (~9월 20일 마감)
+    <!-- 카테고리 1: 출석 & 공성 관리 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-amber-500 pl-3 flex items-center gap-2">
+        <span>📅</span> Attendance & Siege Management
       </h2>
-      <div id="penaltyContainer" class="flex flex-wrap gap-2">
-        <span class="text-sm text-slate-500">데이터를 불러오는 중...</span>
-      </div>
-    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <a href="https://forms.gle/tr7efn8AtNcjigB8A" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-amber-400 group-hover:text-amber-300">Submit Attendance</div>
+            <div class="text-xs text-slate-400 mt-1">보스 참여 후 출석체크 제출 (구글 폼)</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">📝</span>
+        </a>
 
-    <!-- 정산 현황 테이블 -->
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-      <h2 class="text-lg font-bold text-amber-400 mb-4">📋 실시간 출석 및 정산 원장</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left text-slate-300">
-          <thead class="text-xs text-slate-400 uppercase bg-slate-900/60 border-b border-slate-700">
-            <tr>
-              <th class="py-3 px-4">날짜</th>
-              <th class="py-3 px-4">보스명</th>
-              <th class="py-3 px-4">참여 유저</th>
-              <th class="py-3 px-4">수량</th>
-              <th class="py-3 px-4">정산 상태</th>
-            </tr>
-          </thead>
-          <tbody id="sheetTableBody" class="divide-y divide-slate-700">
-            <tr>
-              <td colspan="5" class="py-6 text-center text-slate-500">데이터를 로딩 중입니다...</td>
-            </tr>
-          </tbody>
-        </table>
+        <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-amber-400">Attendance Check</div>
+            <div class="text-xs text-slate-400 mt-1">현재까지의 출석 현황 확인</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
+        </a>
+
+        <a href="https://forms.gle/HHEoWFk9pUtEyy7F6" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-amber-400 group-hover:text-amber-300">Add Siege Point (Joma)</div>
+            <div class="text-xs text-slate-400 mt-1">공성 포인트 제출 (구글 폼)</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">🏰</span>
+        </a>
+
+        <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-amber-400">View Siege Point (Joma)</div>
+            <div class="text-xs text-slate-400 mt-1">공성 포인트 누적 현황 조회</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">📈</span>
+        </a>
+
       </div>
-    </div>
+    </section>
+
+    <!-- 카테고리 2: 운영 규칙 및 시스템 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-emerald-500 pl-3 flex items-center gap-2">
+        <span>📜</span> Rules & Operating Systems
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <a href="https://tinyurl.com/2y3us57m" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-emerald-400 group-hover:text-emerald-300">Operational Rules</div>
+            <div class="text-xs text-slate-400 mt-1">길드 운영 규칙 및 기본 시스템</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">📖</span>
+        </a>
+
+        <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-emerald-400">Inotia Split Rule</div>
+            <div class="text-xs text-slate-400 mt-1">Joma & MMA 이노티아 분배 규칙</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">⚖️</span>
+        </a>
+
+        <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-emerald-400">Dice Requirements</div>
+            <div class="text-xs text-slate-400 mt-1">유니크 아이템 주사위 자격 조건</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">🎲</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- 카테고리 3: 재정 & 전리품 시세 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-cyan-500 pl-3 flex items-center gap-2">
+        <span>💎</span> Economy & Loot Management
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <a href="https://tinyurl.com/5eszcac2" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-cyan-400 group-hover:text-cyan-300">Bank Monitor</div>
+            <div class="text-xs text-slate-400 mt-1">길드 창고 및 자금 현황</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">🏦</span>
+        </a>
+
+        <a href="https://tinyurl.com/4scd9597" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-cyan-400">Loot List</div>
+            <div class="text-xs text-slate-400 mt-1">획득 전리품 및 아이템 목록</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">📦</span>
+        </a>
+
+        <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-cyan-400">Item Price</div>
+            <div class="text-xs text-slate-400 mt-1">아이템 별 시세 기준표</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- 카테고리 4: 명단 및 적대 관리 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-200 border-l-4 border-rose-500 pl-3 flex items-center gap-2">
+        <span>⚔️</span> Roster & Enemy Management
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <a href="https://tinyurl.com/39ur6w9a" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-slate-200 group-hover:text-rose-400">Grade List</div>
+            <div class="text-xs text-slate-400 mt-1">길드원 계급 및 등급 명단</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">🎖️</span>
+        </a>
+
+        <a href="https://tinyurl.com/2s42m428" target="_blank" class="card-hover bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 p-5 rounded-xl flex items-center justify-between group">
+          <div>
+            <div class="font-bold text-rose-400 group-hover:text-rose-300">KOS List</div>
+            <div class="text-xs text-slate-400 mt-1">Kill on Sight (적대 및 타겟 목록)</div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">💀</span>
+        </a>
+
+      </div>
+    </section>
 
   </div>
 
   <script>
-    // 💡 저장한 대문 이미지 파일명 (깃허브에 올린 파일명과 일치해야 함)
-    // 외부 링크를 쓰실 경우 'https://...' 전체 주소를 넣으시면 됩니다.
-    const banner_Image_IMAGE = 'banner_Image.jpg'; 
-
-    // 구글 시트 ID 설정
-    const SHEET_ID = '1Z7HPi4PCCG1ejB-Wtcjqr4FjPvmHpMnFS4xb3WZ-TNs';
-    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+    const BANNER_IMAGE = '배너.jpg'; 
 
     // 이미지 경로 설정
-    document.getElementById('bgImg').src = banner_Image_IMAGE;
+    document.getElementById('bgImg').src = BANNER_IMAGE;
 
-    // 대문 -> 메인 이동 함수
+    // 화면 전환 함수
     function goToMain() {
       document.getElementById('landingScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
-      fetchData(); // 메인 진입 시 데이터 로드
     }
 
-    // 메인 -> 대문 이동 함수
     function goToLanding() {
       document.getElementById('mainDashboard').classList.add('hidden');
       document.getElementById('landingScreen').classList.remove('hidden');
-    }
-
-    // 시트 데이터 수집 함수
-    async function fetchData() {
-      try {
-        const response = await fetch(CSV_URL);
-        const csvText = await response.text();
-
-        Papa.parse(csvText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: function(results) {
-            renderData(results.data);
-          }
-        });
-      } catch (error) {
-        console.error('시트 데이터 로드 실패:', error);
-      }
-    }
-
-    // 시트 데이터 출력 함수
-    function renderData(data) {
-      const tableBody = document.getElementById('sheetTableBody');
-      tableBody.innerHTML = '';
-      let unsettledTotal = 0;
-
-      data.forEach(row => {
-        const date = row['날짜'] || row['일자'] || Object.values(row)[0] || '-';
-        const boss = row['보스'] || row['보스이름'] || Object.values(row)[1] || '-';
-        const user = row['유저명'] || row['유저'] || Object.values(row)[2] || '-';
-        const qty = row['개수'] || row['수량'] || Object.values(row)[3] || '-';
-        const status = row['정산상태'] || row['상태'] || '미정산';
-
-        if (status.includes('미정산')) unsettledTotal++;
-
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-700/50 transition';
-        tr.innerHTML = `
-          <td class="py-3 px-4 font-mono text-xs text-slate-400">${date}</td>
-          <td class="py-3 px-4 font-semibold text-slate-200">${boss}</td>
-          <td class="py-3 px-4 text-slate-300">${user}</td>
-          <td class="py-3 px-4">${qty}</td>
-          <td class="py-3 px-4">
-            <span class="px-2 py-1 rounded text-xs font-semibold ${
-              status.includes('완료') 
-                ? 'bg-emerald-900/60 text-emerald-400 border border-emerald-700' 
-                : 'bg-amber-900/60 text-amber-400 border border-amber-700'
-            }">
-              ${status}
-            </span>
-          </td>
-        `;
-        tableBody.appendChild(tr);
-      });
-
-      document.getElementById('unsettledCount').innerText = `${unsettledTotal} 건`;
-      document.getElementById('lastUpdated').innerText = new Date().toLocaleTimeString('ko-KR');
-
-      renderPenalties(['grok', 'm', 'EJ', 'Rookie', 'Aim', 'Luvsoul']);
-    }
-
-    function renderPenalties(penaltyList) {
-      const container = document.getElementById('penaltyContainer');
-      container.innerHTML = '';
-      document.getElementById('penaltyCount').innerText = `${penaltyList.length} 명`;
-
-      penaltyList.forEach(name => {
-        const badge = document.createElement('span');
-        badge.className = 'px-3 py-1 bg-rose-950/80 border border-rose-800 text-rose-300 rounded-full text-xs font-medium';
-        badge.innerText = `⚠️ ${name}`;
-        container.appendChild(badge);
-      });
     }
   </script>
 </body>
