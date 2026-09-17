@@ -4,21 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <!-- 1. 브라우저 탭 및 기본 제목 -->
+  <!-- 📌 브라우저 탭 및 기본 제목 -->
   <title>【 Joma & UFC 】 Official Portal</title>
 
-  <!-- 2. 링크 공유 시 표시되는 Open Graph 메타 태그 (카카오톡, 디스코드 등) -->
+  <!-- 🌐 카카오톡, 디스코드 등 링크 공유 시 표시되는 Open Graph 메타 태그 -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="⚔️ Joma & UFC Official Portal ⚔️" />
   <meta property="og:description" content="길드 운영, 출석체크 및 주요 링크 모음 포털" />
-  <meta property="og:image" content="banner_Image.jpg" /> <!-- 썸네일 이미지 경로 -->
+  <meta property="og:image" content="banner_Image.jpg" />
 
-  <!-- 3. 트위터 카드는 선택 사항 -->
+  <!-- 트위터 카드 메타 태그 -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="⚔️ Joma & UFC Official Portal ⚔️" />
   <meta name="twitter:description" content="길드 운영, 출석체크 및 주요 링크 모음 포털" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #f8fafc; color: #0f172a; }
+    .card-hover { transition: all 0.2s ease-in-out; }
+    .card-hover:hover { transform: translateY(-3px); }
+  </style>
 </head>
 <body>
 
@@ -49,7 +54,7 @@
   <!-- 2️⃣ 메인 링크 포털 화면 -->
   <div id="mainDashboard" class="hidden p-4 md:p-8 max-w-6xl mx-auto space-y-8">
     
-    <!-- 상단 헤더 -->
+    <!-- 상단 헤더 & 언어 스위처 -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
       <div>
         <h1 class="text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2">
@@ -58,7 +63,7 @@
         <p id="sub-header" data-i18n="subtitle" class="text-xs md:text-sm text-slate-500 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
       </div>
 
-      <!-- 🌐 언어 선택 스위처 (ENG/KOR, PHP, IDN) -->
+      <!-- 🌐 언어 선택 버튼 (ENG/KOR, PHP, IDN) -->
       <div class="flex items-center bg-slate-200/80 p-1 rounded-xl border border-slate-300 text-xs font-bold shadow-inner">
         <button onclick="setLang('kor')" id="btn-kor" class="lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow">ENG / KOR</button>
         <button onclick="setLang('php')" id="btn-php" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">PHP</button>
@@ -66,11 +71,12 @@
       </div>
     </div>
 
-    <!-- ⚠️ 주의사항 안내 박스 -->
-    <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-4 flex items-start gap-3 text-amber-900 text-sm shadow-sm">
-      <span class="text-lg">📢</span>
-      <div>
-        <strong class="font-bold text-amber-700">Attendance Notice:</strong> <span data-i18n="notice">If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don't check in twice!</span>
+    <!-- ⚠️ 주의사항 안내 박스 (가시성/시인성 개선) -->
+    <div class="bg-amber-50 border border-amber-300/80 rounded-xl p-4 md:p-5 flex items-center gap-3.5 text-slate-800 text-sm md:text-base shadow-sm">
+      <span class="text-2xl shrink-0 leading-none">📢</span>
+      <div class="leading-relaxed">
+        <strong class="font-bold text-amber-800 text-base md:text-lg mr-1">Attendance Notice:</strong> 
+        <span data-i18n="notice">If you make a mistake on attendance, tell <span class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black">"Sea"</span>. Don't check in twice!</span>
       </div>
     </div>
 
@@ -216,16 +222,17 @@
     const BANNER_IMAGE = 'banner_Image.jpg'; 
     document.getElementById('bgImg').src = BANNER_IMAGE;
 
+    // 대문 -> 메인 이동
     function goToMain() {
       document.getElementById('landingScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
     }
 
-    // 🌐 언어별 데이터 사전
+    // 🌐 언어별 데이터 사전 (강조 뱃지 디자인 적용)
     const i18nData = {
       kor: {
         subtitle: "길드 운영 및 출석체크 주요 링크 모음",
-        notice: 'If you make a mistake on attendance, tell <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Don\'t check in twice!',
+        notice: 'If you make a mistake on attendance, tell <span class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black">"Sea"</span>. Don\'t check in twice!',
         rule_op: "길드 운영 규칙 및 기본 시스템",
         rule_inotia: "Joma & MMA 이노티아 분배 규칙",
         rule_dice: "유니크 아이템 주사위 자격 조건",
@@ -241,7 +248,7 @@
       },
       php: {
         subtitle: "Mga pangunahing link para sa guild operation at attendance",
-        notice: 'Kung nagkamali sa attendance, sabihin kay <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Huwag mag-check in nang dalawang beses!',
+        notice: 'Kung nagkamali sa attendance, sabihin kay <span class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black">"Sea"</span>. Huwag mag-check in nang dalawang beses!',
         rule_op: "Mga tuntunin sa guild at batayang sistema",
         rule_inotia: "Mga tuntunin sa paghahati ng Inotia (Joma & MMA)",
         rule_dice: "Mga kwalipikasyon sa dice roll para sa Unique Item",
@@ -257,7 +264,7 @@
       },
       idn: {
         subtitle: "Kumpulan tautan utama untuk operasional guild & kehadiran",
-        notice: 'Jika terjadi kesalahan absensi, hubungi <span class="bg-amber-200/60 px-2 py-0.5 rounded text-amber-900 font-bold">"Sea"</span>. Jangan absen dua kali!',
+        notice: 'Jika terjadi kesalahan absensi, hubungi <span class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black">"Sea"</span>. Jangan absen dua kali!',
         rule_op: "Aturan operasional guild & sistem dasar",
         rule_inotia: "Aturan pembagian Inotia Joma & MMA",
         rule_dice: "Syarat kualifikasi dadu untuk Item Unik",
@@ -275,7 +282,6 @@
 
     // 언어 변경 함수
     function setLang(lang) {
-      // 1. 모든 data-i18n 요소 텍스트 변경
       const elements = document.querySelectorAll('[data-i18n]');
       elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -284,7 +290,6 @@
         }
       });
 
-      // 2. 버튼 활성화 스타일 전환
       const buttons = {
         kor: document.getElementById('btn-kor'),
         php: document.getElementById('btn-php'),
