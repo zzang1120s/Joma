@@ -63,11 +63,12 @@
         <p id="sub-header" data-i18n="subtitle" class="text-xs md:text-sm text-slate-500 mt-1">길드 운영 및 출석체크 주요 링크 모음</p>
       </div>
 
-      <!-- 🌐 언어 선택 버튼 (ENG/KOR, PHP, IDN) -->
-      <div class="flex items-center bg-slate-200/80 p-1 rounded-xl border border-slate-300 text-xs font-bold shadow-inner">
+      <!-- 🌐 언어 선택 버튼 (ENG/KOR, PHP, IDN, CHN) -->
+      <div class="flex items-center bg-slate-200/80 p-1 rounded-xl border border-slate-300 text-xs font-bold shadow-inner flex-wrap gap-1">
         <button onclick="setLang('kor')" id="btn-kor" class="lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow">ENG / KOR</button>
         <button onclick="setLang('php')" id="btn-php" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">PHP</button>
         <button onclick="setLang('idn')" id="btn-idn" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">IDN</button>
+        <button onclick="setLang('chn')" id="btn-chn" class="lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">CHN</button>
       </div>
     </div>
 
@@ -331,6 +332,22 @@
         ecn_bank: "Status gudang & dana guild",
         ecn_loot: "Daftar item & hasil jarahan",
         ecn_price: "Tabel standar harga item"
+      },
+      chn: {
+        subtitle: "公会运营及考勤签到主要链接",
+        notice: '如果考勤填错了，请联系 <span class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black">"Sea"</span>。请勿重复签到！',
+        rule_op: "公会运营规则及基本系统",
+        rule_inotia: "Joma & MMA Inotia 分配规则",
+        rule_dice: "Unique装备 R点/掷骰 资格条件",
+        att_submit: "打完Boss后提交考勤 (Google表单)",
+        att_check: "查看至今为止的考勤记录",
+        siege_add: "提交攻城积分 (Google表单)",
+        siege_view: "查询累计攻城积分",
+        rst_grade: "公会成员军衔及等级名单",
+        rst_kos: "Kill on Sight (敌对及目标名单)",
+        ecn_bank: "公会仓库及资金状况",
+        ecn_loot: "战利品及获得的物品清单",
+        ecn_price: "各物品价格标准表"
       }
     };
 
@@ -347,7 +364,8 @@
       const buttons = {
         kor: document.getElementById('btn-kor'),
         php: document.getElementById('btn-php'),
-        idn: document.getElementById('btn-idn')
+        idn: document.getElementById('btn-idn'),
+        chn: document.getElementById('btn-chn')
       };
 
       Object.keys(buttons).forEach(key => {
