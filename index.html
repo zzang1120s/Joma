@@ -219,6 +219,48 @@
       </div>
     </section>
 
+    <!-- 📸 카테고리 5: 우리의 추억 (갤러리) -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-purple-500 pl-3 flex items-center gap-2">
+        <span>📸</span> <span data-i18n="cat_memories">Our Memories</span>
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+
+        <!-- photo1.jpg -->
+        <div onclick="openImageModal('photo1.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
+          <img src="photo1.jpg" alt="photo1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo1.jpg'">
+          <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
+          </div>
+        </div>
+
+        <!-- photo2.jpg -->
+        <div onclick="openImageModal('photo2.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
+          <img src="photo2.jpg" alt="photo2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo2.jpg'">
+          <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
+          </div>
+        </div>
+
+        <!-- photo3.jpg -->
+        <div onclick="openImageModal('photo3.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
+          <img src="photo3.jpg" alt="photo3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo3.jpg'">
+          <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
+          </div>
+        </div>
+
+        <!-- photo4.jpg -->
+        <div onclick="openImageModal('photo4.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
+          <img src="photo4.jpg" alt="photo4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo4.jpg'">
+          <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div>
 
 
@@ -244,6 +286,15 @@
   </div>
 
 
+  <!-- 🖼️ 사진 확대 모달 레이어 -->
+  <div id="imageModal" onclick="closeImageModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 cursor-pointer">
+    <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center justify-center">
+      <img id="imageModalImg" src="" alt="확대 사진" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain border border-slate-800">
+      <p class="text-slate-400 text-xs mt-3">클릭하거나 ESC 키를 누르면 닫힙니다.</p>
+    </div>
+  </div>
+
+
   <script>
     const BANNER_IMAGE = 'banner_Image.jpg'; 
     document.getElementById('bgImg').src = BANNER_IMAGE;
@@ -259,14 +310,27 @@
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('formIframe').src = formUrl;
       document.getElementById('formModal').classList.remove('hidden');
-      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+      document.body.style.overflow = 'hidden';
     }
 
     // 🌐 구글 폼 모달 닫기 함수
     function closeFormModal() {
       document.getElementById('formModal').classList.add('hidden');
       document.getElementById('formIframe').src = '';
-      document.body.style.overflow = 'auto'; // 배경 스크롤 재개
+      document.body.style.overflow = 'auto';
+    }
+
+    // 🖼️ 사진 확대 모달 열기/닫기
+    function openImageModal(imgSrc) {
+      document.getElementById('imageModalImg').src = imgSrc;
+      document.getElementById('imageModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+      document.getElementById('imageModal').classList.add('hidden');
+      document.getElementById('imageModalImg').src = '';
+      document.body.style.overflow = 'auto';
     }
 
     // 배경 클릭 시 모달 닫기
@@ -276,10 +340,11 @@
       }
     }
 
-    // ESC 키 입력 시 모달 닫기
+    // ESC 키 입력 시 모든 모달 닫기
     window.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeFormModal();
+        closeImageModal();
       }
     });
 
@@ -299,7 +364,8 @@
         rst_kos: "Kill on Sight (적대 및 타겟 목록)",
         ecn_bank: "길드 창고 및 자금 현황",
         ecn_loot: "획득 전리품 및 아이템 목록",
-        ecn_price: "아이템 별 시세 기준표"
+        ecn_price: "아이템 별 시세 기준표",
+        cat_memories: "Our Memories (우리의 추억)"
       },
       php: {
         subtitle: "Mga pangunahing link para sa guild operation at attendance",
@@ -315,7 +381,8 @@
         rst_kos: "Kill on Sight (Listahan ng mga kaaway at target)",
         ecn_bank: "Status ng guild bank at pondo",
         ecn_loot: "Listahan ng mga nakuhang loot at gamit",
-        ecn_price: "Talahanayan ng presyo ng mga item"
+        ecn_price: "Talahanayan ng presyo ng mga item",
+        cat_memories: "Our Memories (Ating Mga Alaala)"
       },
       idn: {
         subtitle: "Kumpulan tautan utama untuk operasional guild & kehadiran",
@@ -331,7 +398,8 @@
         rst_kos: "Kill on Sight (Daftar musuh & target)",
         ecn_bank: "Status gudang & dana guild",
         ecn_loot: "Daftar item & hasil jarahan",
-        ecn_price: "Tabel standar harga item"
+        ecn_price: "Tabel standar harga item",
+        cat_memories: "Our Memories (Kenangan Kita)"
       },
       chn: {
         subtitle: "公会运营及考勤签到主要链接",
@@ -347,7 +415,8 @@
         rst_kos: "Kill on Sight (敌对及目标名单)",
         ecn_bank: "公会仓库及资金状况",
         ecn_loot: "战利品及获得的物品清单",
-        ecn_price: "各物品价格标准表"
+        ecn_price: "各物品价格标准表",
+        cat_memories: "Our Memories (我们的回忆)"
       }
     };
 
