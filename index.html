@@ -116,9 +116,9 @@
           <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
             <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
           </h2>
-          <!-- 🕒 KST 실시간 시계 배지 -->
+          <!-- 🕒 KST 실시간 시계 배지 (: 삭제 완료) -->
           <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
-            <span>KST:</span>
+            <span>KST</span>
             <span id="kstClock">00:00:00 AM</span>
           </div>
         </div>
@@ -342,6 +342,9 @@
       measurementId: "G-RQ1WF2MCM8"
     };
 
+    // 🔑 관리자 마스터 비밀번호 설정
+    const MASTER_PASSWORD = "1719";
+
     // Firebase 초기화
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -355,7 +358,7 @@
     let slotData = {};
     let userColorMap = {};
 
-    // 🕒 KST 실시간 시계 구동 함수 (KST: HH:MM:SS AM/PM)
+    // 🕒 KST 실시간 시계 구동 함수 (KST 시시:분분:초초 AM/PM 형태로 수정완료)
     function updateKSTClock() {
       const now = new Date();
       const options = { 
@@ -365,7 +368,8 @@
         minute: '2-digit', 
         second: '2-digit' 
       };
-      const timeString = new Intl.DateTimeFormat('en-US', options).format(now).replace(' KST', '');
+      // 'KST' 글자와 콜론 간격을 정리한 출력
+      const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
       document.getElementById('kstClock').innerText = timeString;
     }
     setInterval(updateKSTClock, 1000);
@@ -666,7 +670,8 @@
         let inputPw = promptModalReplacement(langData.prompt_enter_pw || "비밀번호를 입력해주세요.");
         if (inputPw === null) return;
 
-        if (inputPw === existing.pw) {
+        // 🔑 사용자 비밀번호 또는 마스터 비밀번호(1719) 검증
+        if (inputPw === existing.pw || inputPw === MASTER_PASSWORD) {
           if (confirmModalReplacement(langData.confirm_delete || "예약을 취소하시겠습니까?")) {
             delete slotData[key];
             saveToFirestore();
