@@ -104,16 +104,16 @@
       </div>
     </section>
 
-    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & 한국 실시간 시계 포함 -->
+    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & KR 실시간 시계 포함 -->
     <section class="space-y-4">
       <div class="flex justify-between items-center flex-wrap gap-2">
         <div class="flex items-center gap-3 flex-wrap">
           <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
             <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
           </h2>
-          <!-- 🕒 한국 실시간 시계 배지 -->
+          <!-- 🕒 한국 실시간 시계 배지 (KR 시시:분분:초초 AM/PM) -->
           <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
-            <span>🇰🇷 KST:</span>
+            <span>KR</span>
             <span id="kstClock">00:00:00 AM</span>
           </div>
         </div>
@@ -333,7 +333,7 @@
     let loggedInUser = null;
     let selectedSlots = new Set();
 
-    // 🕒 한국 시간(KST) 실시간 시계 구동 함수
+    // 🕒 한국 시간(KST) 실시간 시계 구동 함수 (KR 시시:분분:초초 AM/PM)
     function updateKSTClock() {
       const now = new Date();
       const options = { 
@@ -343,8 +343,8 @@
         minute: '2-digit', 
         second: '2-digit' 
       };
-      const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
-      document.getElementById('kstClock').innerText = `${timeString} KST`;
+      const timeString = new Intl.DateTimeFormat('en-US', options).format(now).replace(' KST', '');
+      document.getElementById('kstClock').innerText = timeString;
     }
     setInterval(updateKSTClock, 1000);
     updateKSTClock();
