@@ -115,97 +115,24 @@
       </div>
     </section>
 
-    <!-- ⏰ 신규 추가: 미니 보스 스케줄 및 시간 배분 그래프 -->
+    <!-- ⏰ 신규: 미니 보스 24시간 스케줄 타임라인 -->
     <section class="space-y-4">
-      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
-        <span>⏰</span> Mini-Bosses Schedule & Time Allocation <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 font-normal">Max 6 Hours per Boss</span>
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
+          <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
+        </h2>
+        <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold">Max 6 Hours per User</span>
+      </div>
 
-        <!-- 1. Apapa -->
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
-          <div>
-            <!-- 이미지 영역 (원하는 파일명으로 교체 가능) -->
-            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
-              <img src="apapa.jpg" alt="Apapa" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Apapa'">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-slate-800 text-sm">Apapa</span>
-              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;15mins&gt;</span>
-            </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm overflow-x-auto">
+        <div class="min-w-[800px] space-y-3">
+          
+          <!-- 보스별 행 목록 -->
+          <div id="boss-schedule-container" class="space-y-4 divide-y divide-slate-100">
+            <!-- JS로 보스 4개 동적 생성 -->
           </div>
-          <!-- 가로형 시간 배분 그래프 (6시간 슬롯) -->
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
-              <span>Time Slots (Max 6h)</span>
-              <span id="count-apapa" class="text-indigo-600 font-bold">0 / 6h</span>
-            </div>
-            <div class="grid grid-cols-6 gap-1" id="slots-apapa">
-              <!-- JS로 6개 슬롯 생성 -->
-            </div>
-          </div>
+
         </div>
-
-        <!-- 2. Glucose -->
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
-          <div>
-            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
-              <img src="glucose.jpg" alt="Glucose" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Glucose'">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-slate-800 text-sm">Glucose</span>
-              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;30mins&gt;</span>
-            </div>
-          </div>
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
-              <span>Time Slots (Max 6h)</span>
-              <span id="count-glucose" class="text-indigo-600 font-bold">0 / 6h</span>
-            </div>
-            <div class="grid grid-cols-6 gap-1" id="slots-glucose"></div>
-          </div>
-        </div>
-
-        <!-- 3. Overload -->
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
-          <div>
-            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
-              <img src="overload.jpg" alt="Overload" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Overload'">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-slate-800 text-sm">Overload</span>
-              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;30mins&gt;</span>
-            </div>
-          </div>
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
-              <span>Time Slots (Max 6h)</span>
-              <span id="count-overload" class="text-indigo-600 font-bold">0 / 6h</span>
-            </div>
-            <div class="grid grid-cols-6 gap-1" id="slots-overload"></div>
-          </div>
-        </div>
-
-        <!-- 4. Red Book & Lazuli -->
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
-          <div>
-            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
-              <img src="redbook.jpg" alt="Red Book & Lazuli" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=RedBook+%26+Lazuli'">
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-slate-800 text-sm truncate" title="Red Book & Lazuli">Red Book & Lazuli</span>
-              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold shrink-0">&lt;30m&gt;</span>
-            </div>
-          </div>
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
-              <span>Time Slots (Max 6h)</span>
-              <span id="count-redbook" class="text-indigo-600 font-bold">0 / 6h</span>
-            </div>
-            <div class="grid grid-cols-6 gap-1" id="slots-redbook"></div>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -304,7 +231,7 @@
 
         <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Item Price</div>
+            <div class="font-bold text-slate-800 group-hover:text-cyan-600">Item Price</div>
             <div data-i18n="ecn_price" class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
@@ -442,44 +369,128 @@
       }
     });
 
-    // ⏰ 미니 보스 6시간 타임슬롯 초기화 및 토글 로직
-    const bosses = ['apapa', 'glucose', 'overload', 'redbook'];
-    
-    bosses.forEach(boss => {
-      const container = document.getElementById(`slots-${boss}`);
-      for (let i = 1; i <= 6; i++) {
-        const slot = document.createElement('div');
-        slot.className = "h-7 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold text-slate-500";
-        slot.innerText = `${i}h`;
-        slot.dataset.active = "false";
-        
-        slot.onclick = function() {
-          const isActive = slot.dataset.active === "true";
-          if (!isActive) {
-            // 활성화 (최대 6시간 제한 검사)
-            const activeCount = container.querySelectorAll('[data-active="true"]').length;
-            if (activeCount >= 6) {
-              alert("보스당 최대 6시간까지만 점유할 수 있습니다.");
-              return;
-            }
-            slot.dataset.active = "true";
-            slot.className = "h-7 bg-indigo-600 text-white border border-indigo-700 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold shadow-sm";
-          } else {
-            // 비활성화
-            slot.dataset.active = "false";
-            slot.className = "h-7 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold text-slate-500";
-          }
-          updateCount(boss);
-        };
-        container.appendChild(slot);
-      }
-    });
+    // ⏰ 미니 보스 24시간 스케줄 타임라인 생성 로직
+    const bossList = [
+      { id: 'apapa', name: 'Apapa', time: '<15mins>', img: 'apapa.jpg' },
+      { id: 'glucose', name: 'Glucose', time: '<30mins>', img: 'glucose.jpg' },
+      { id: 'overload', name: 'Overload', time: '<30mins>', img: 'overload.jpg' },
+      { id: 'redbook', name: 'Red Book & Lazuli', time: '<30mins>', img: 'redbook.jpg' }
+    ];
 
-    function updateCount(boss) {
-      const container = document.getElementById(`slots-${boss}`);
-      const activeCount = container.querySelectorAll('[data-active="true"]').length;
-      document.getElementById(`count-${boss}`).innerText = `${activeCount} / 6h`;
+    function initBossTimeline() {
+      const container = document.getElementById('boss-schedule-container');
+      container.innerHTML = '';
+
+      bossList.forEach((boss, index) => {
+        const row = document.createElement('div');
+        row.className = `flex gap-4 items-center ${index !== 0 ? 'pt-4' : ''}`;
+
+        // 왼쪽: 보스 프로필 (이미지 + 이름 + 젠타임)
+        const profile = `
+          <div class="w-48 shrink-0 flex items-center gap-3 bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+            <img src="${boss.img}" alt="${boss.name}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm" onerror="this.src='https://placehold.co/100x100/e2e8f0/64748b?text=${boss.id}'">
+            <div class="min-w-0">
+              <div class="font-bold text-slate-800 text-sm truncate" title="${boss.name}">${boss.name}</div>
+              <span class="text-[11px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">${boss.time}</span>
+            </div>
+          </div>
+        `;
+
+        // 오른쪽: AM / PM 타임라인 영역
+        let timeGrid = `
+          <div class="flex-1 space-y-1.5">
+            <!-- AM 라인 -->
+            <div class="flex items-center gap-1.5">
+              <span class="w-8 text-xs font-black text-slate-400 shrink-0">AM</span>
+              <div class="grid grid-cols-12 gap-1 flex-1">
+        `;
+
+        for (let i = 1; i <= 12; i++) {
+          timeGrid += `
+            <div onclick="editSlot('${boss.id}', 'AM', ${i})" id="slot-${boss.id}-AM-${i}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+              <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
+              <span id="text-${boss.id}-AM-${i}" class="text-[9px] font-bold text-emerald-800 truncate w-full hidden"></span>
+            </div>
+          `;
+        }
+
+        timeGrid += `
+              </div>
+            </div>
+
+            <!-- PM 라인 -->
+            <div class="flex items-center gap-1.5">
+              <span class="w-8 text-xs font-black text-slate-400 shrink-0">PM</span>
+              <div class="grid grid-cols-12 gap-1 flex-1">
+        `;
+
+        for (let i = 1; i <= 12; i++) {
+          timeGrid += `
+            <div onclick="editSlot('${boss.id}', 'PM', ${i})" id="slot-${boss.id}-PM-${i}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+              <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
+              <span id="text-${boss.id}-PM-${i}" class="text-[9px] font-bold text-indigo-800 truncate w-full hidden"></span>
+            </div>
+          `;
+        }
+
+        timeGrid += `
+              </div>
+            </div>
+          </div>
+        `;
+
+        row.innerHTML = profile + timeGrid;
+        container.appendChild(row);
+      });
     }
+
+    // 셀 클릭 시 아이디 등록/수정/삭제
+    function editSlot(bossId, period, hour) {
+      const textElem = document.getElementById(`text-${bossId}-${period}-${hour}`);
+      const slotElem = document.getElementById(`slot-${bossId}-${period}-${hour}`);
+      const currentName = textElem.innerText;
+
+      const newName = prompt(`[${bossId.toUpperCase()}] ${period} ${hour}시 점유 유저 아이디를 입력하세요.\n(삭제하시려면 내용을 지우고 확인을 눌러주세요)`, currentName);
+
+      if (newName === null) return; // 취소 클릭 시
+
+      const trimmedName = newName.trim();
+
+      if (trimmedName === '') {
+        // 아이디 삭제
+        textElem.innerText = '';
+        textElem.classList.add('hidden');
+        slotElem.className = "h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative";
+      } else {
+        // 보스당 최대 6시간 점유 제한 검사 (해당 유저의 등록 개수 카운트)
+        let userCount = 0;
+        ['AM', 'PM'].forEach(p => {
+          for (let h = 1; h <= 12; h++) {
+            const t = document.getElementById(`text-${bossId}-${p}-${h}`).innerText;
+            if (t === trimmedName && !(p === period && h === hour)) {
+              userCount++;
+            }
+          }
+        });
+
+        if (userCount >= 6) {
+          alert(`'${trimmedName}' 유저는 해당 보스에서 이미 6시간을 점유하셨습니다. (보스당 최대 6시간까지만 등록 가능)`);
+          return;
+        }
+
+        // 아이디 등록
+        textElem.innerText = trimmedName;
+        textElem.classList.remove('hidden');
+        if (period === 'AM') {
+          slotElem.className = "h-8 bg-emerald-100 hover:bg-emerald-200 border border-emerald-400 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center shadow-sm";
+        } else {
+          slotElem.className = "h-8 bg-indigo-100 hover:bg-indigo-200 border border-indigo-400 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center shadow-sm";
+        }
+      }
+    }
+
+    // 페이지 로드 시 타임라인 초기화
+    initBossTimeline();
 
     // 🌐 언어별 데이터 사전
     const i18nData = {
@@ -527,7 +538,7 @@
         att_check: "Cek status kehadiran saat ini",
         siege_add: "Kirim Poin Siege (Google Form)",
         siege_view: "Lihat akumulasi Poin Siege",
-        rst_grade: "Daftار pangkat & tingkatan anggota guild",
+        rst_grade: "Daftar pangkat & tingkatan anggota guild",
         rst_kos: "Kill on Sight (Daftar musuh & target)",
         ecn_bank: "Status gudang & dana guild",
         ecn_loot: "Daftar item & hasil jarahan",
