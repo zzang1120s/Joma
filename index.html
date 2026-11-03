@@ -12,6 +12,11 @@
   <meta property="og:image" content="banner_Image.jpg" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 🔥 Firebase SDK (Firestore) 로드 -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     body { background-color: #f8fafc; color: #0f172a; }
     .card-hover { transition: all 0.2s ease-in-out; }
@@ -89,14 +94,14 @@
         </a>
         <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-emerald-600">Inotia Split Rule</div>
+            <div class="font-bold text-emerald-700 group-hover:text-emerald-600">Inotia Split Rule</div>
             <div data-i18n="rule_inotia" class="text-xs text-slate-500 mt-1">Joma & MMA 이노티아 분배 규칙</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">⚖️</span>
         </a>
         <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-emerald-600">Dice Requirements</div>
+            <div class="font-bold text-emerald-700 group-hover:text-emerald-600">Dice Requirements</div>
             <div data-i18n="rule_dice" class="text-xs text-slate-500 mt-1">유니크 아이템 주사위 자격 조건</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎲</span>
@@ -104,16 +109,16 @@
       </div>
     </section>
 
-    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & KR 실시간 시계 포함 -->
+    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & KST 실시간 시계 포함 -->
     <section class="space-y-4">
       <div class="flex justify-between items-center flex-wrap gap-2">
         <div class="flex items-center gap-3 flex-wrap">
           <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
             <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
           </h2>
-          <!-- 🕒 한국 실시간 시계 배지 (KR 시시:분분:초초 AM/PM) -->
+          <!-- 🕒 KST 실시간 시계 배지 -->
           <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
-            <span>KR</span>
+            <span>KST:</span>
             <span id="kstClock">00:00:00 AM</span>
           </div>
         </div>
@@ -150,7 +155,7 @@
         </div>
         <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-amber-600">Attendance Check</div>
+            <div class="font-bold text-amber-800 group-hover:text-amber-600">Attendance Check</div>
             <div data-i18n="att_check" class="text-xs text-slate-500 mt-1">현재까지의 출석 현황 확인</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
@@ -164,7 +169,7 @@
         </div>
         <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-amber-600">View Siege Point (Joma)</div>
+            <div class="font-bold text-amber-800 group-hover:text-amber-600">View Siege Point (Joma)</div>
             <div data-i18n="siege_view" class="text-xs text-slate-500 mt-1">공성 포인트 누적 현황 조회</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📈</span>
@@ -326,14 +331,31 @@
 
 
   <script>
+    // 🔥 joma-dae4c 프로젝트 Firebase 설정 적용
+    const firebaseConfig = {
+      apiKey: "AIzaSyAjecX2BwKqapK7l-9Apr12QwiPBsSSUYA",
+      authDomain: "joma-dae4c.firebaseapp.com",
+      projectId: "joma-dae4c",
+      storageBucket: "joma-dae4c.firebasestorage.app",
+      messagingSenderId: "663742607808",
+      appId: "1:663742607808:web:57717c841b76612baf9825",
+      measurementId: "G-RQ1WF2MCM8"
+    };
+
+    // Firebase 초기화
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     const BANNER_IMAGE = 'banner_Image.jpg'; 
     document.getElementById('bgImg').src = BANNER_IMAGE;
 
     let currentLang = 'kor';
     let loggedInUser = null;
     let selectedSlots = new Set();
+    let slotData = {};
+    let userColorMap = {};
 
-    // 🕒 한국 시간(KST) 실시간 시계 구동 함수 (KR 시시:분분:초초 AM/PM)
+    // 🕒 KST 실시간 시계 구동 함수 (KST: HH:MM:SS AM/PM)
     function updateKSTClock() {
       const now = new Date();
       const options = { 
@@ -349,32 +371,78 @@
     setInterval(updateKSTClock, 1000);
     updateKSTClock();
 
-    // 🕒 한국 시간(KST) 기준 00:00 자정 초기화 체크 로직
-    function checkDailyReset() {
+    // 🕒 한국 시간(KST) 기준 00:00 자정 자동 초기화 로직
+    async function checkDailyReset(serverResetDate) {
       const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
       const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
-      const lastResetDate = localStorage.getItem('joma_reset_date');
 
-      if (lastResetDate !== todayStr) {
-        localStorage.removeItem('joma_slot_data');
-        localStorage.removeItem('joma_user_color_map');
-        localStorage.setItem('joma_reset_date', todayStr);
+      // 서버의 저장된 날짜가 오늘 날짜와 다르면 DB 초기화
+      if (serverResetDate && serverResetDate !== todayStr) {
+        slotData = {};
+        userColorMap = {};
+        await db.collection("joma_portal").doc("slots_data").set({
+          slots: {},
+          colors: {},
+          resetDate: todayStr,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
       }
     }
-    checkDailyReset();
 
-    let slotData = JSON.parse(localStorage.getItem('joma_slot_data') || '{}');
-    let userColorMap = JSON.parse(localStorage.getItem('joma_user_color_map') || '{}');
+    // 🔥 Firestore 실시간 데이터 동기화 리스너 (모든 기기/유저 간 실시간 연동)
+    function initRealtimeSync() {
+      db.collection("joma_portal").doc("slots_data").onSnapshot(async (doc) => {
+        if (doc.exists) {
+          const serverData = doc.data();
+          const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+          const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
 
-    function saveSlotData() {
-      localStorage.setItem('joma_slot_data', JSON.stringify(slotData));
-      localStorage.setItem('joma_user_color_map', JSON.stringify(userColorMap));
+          // 자정 초기화 검사
+          if (serverData.resetDate !== todayStr) {
+            await checkDailyReset(serverData.resetDate);
+            return;
+          }
+
+          slotData = serverData.slots || {};
+          userColorMap = serverData.colors || {};
+        } else {
+          slotData = {};
+          userColorMap = {};
+          const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+          const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+          await db.collection("joma_portal").doc("slots_data").set({
+            slots: {},
+            colors: {},
+            resetDate: todayStr,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        renderSlots();
+      });
+    }
+
+    // 🔥 Firestore에 변경 데이터 저장
+    async function saveToFirestore() {
+      try {
+        const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+        const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+
+        await db.collection("joma_portal").doc("slots_data").set({
+          slots: slotData,
+          colors: userColorMap,
+          resetDate: todayStr,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (error) {
+        console.error("데이터 저장 실패:", error);
+      }
     }
 
     function goToMain() {
       document.getElementById('landingScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
       initBossTimeline();
+      initRealtimeSync();
     }
 
     function openFormModal(title, formUrl) {
@@ -439,7 +507,6 @@
       const assignedCount = Object.keys(userColorMap).length;
       const colorIndex = assignedCount % COLOR_PALETTE.length;
       userColorMap[userId] = colorIndex;
-      saveSlotData();
 
       return COLOR_PALETTE[colorIndex];
     }
@@ -519,6 +586,25 @@
     }
 
     function renderSlots() {
+      // 모든 슬롯 초기화 후 다시 그림
+      bossList.forEach(boss => {
+        ['AM', 'PM'].forEach(period => {
+          for (let i = 1; i <= 12; i++) {
+            const key = `${boss.id}-${period}-${i}`;
+            const slotElem = document.getElementById(`slot-${key}`);
+            const textElem = document.getElementById(`text-${key}`);
+            if (slotElem && textElem) {
+              slotElem.style.backgroundColor = '';
+              slotElem.style.borderColor = '';
+              textElem.innerText = '';
+              textElem.classList.add('hidden');
+              slotElem.className = "h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative";
+            }
+          }
+        });
+      });
+
+      // 서버 데이터 반영
       Object.keys(slotData).forEach(key => {
         const data = slotData[key];
         const slotElem = document.getElementById(`slot-${key}`);
@@ -583,14 +669,7 @@
         if (inputPw === existing.pw) {
           if (confirmModalReplacement(langData.confirm_delete || "예약을 취소하시겠습니까?")) {
             delete slotData[key];
-            saveSlotData();
-            const slotElem = document.getElementById(`slot-${key}`);
-            const textElem = document.getElementById(`text-${key}`);
-            textElem.innerText = '';
-            textElem.classList.add('hidden');
-            slotElem.style.backgroundColor = '';
-            slotElem.style.borderColor = '';
-            slotElem.className = "h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative";
+            saveToFirestore();
           }
         } else {
           showCustomAlert(langData.alert_pw_wrong || "비밀번호가 일치하지 않습니다.");
@@ -640,8 +719,7 @@
         slotData[key] = { id: loggedInUser.id, pw: loggedInUser.pw };
       });
 
-      saveSlotData();
-      renderSlots();
+      saveToFirestore();
       selectedSlots.clear();
 
       showCustomAlert(langData.alert_reserved || "예약이 완료되었습니다!");
