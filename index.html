@@ -104,12 +104,19 @@
       </div>
     </section>
 
-    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & Check In / Reserve 버튼 -->
+    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & 한국 실시간 시계 포함 -->
     <section class="space-y-4">
       <div class="flex justify-between items-center flex-wrap gap-2">
-        <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
-          <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
-        </h2>
+        <div class="flex items-center gap-3 flex-wrap">
+          <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
+            <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
+          </h2>
+          <!-- 🕒 한국 실시간 시계 배지 -->
+          <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
+            <span>🇰🇷 KST:</span>
+            <span id="kstClock">00:00:00 AM</span>
+          </div>
+        </div>
         
         <div class="flex items-center gap-3">
           <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold" data-i18n="max_notice">Max 6 Hours per User (KST Reset 00:00)</span>
@@ -210,7 +217,7 @@
         </a>
         <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Item Price</div>
+            <div class="font-bold text-cyan-600 group-hover:text-cyan-600">Item Price</div>
             <div data-i18n="ecn_price" class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
@@ -326,6 +333,22 @@
     let loggedInUser = null;
     let selectedSlots = new Set();
 
+    // 🕒 한국 시간(KST) 실시간 시계 구동 함수
+    function updateKSTClock() {
+      const now = new Date();
+      const options = { 
+        timeZone: 'Asia/Seoul', 
+        hour12: true, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      };
+      const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
+      document.getElementById('kstClock').innerText = `${timeString} KST`;
+    }
+    setInterval(updateKSTClock, 1000);
+    updateKSTClock();
+
     // 🕒 한국 시간(KST) 기준 00:00 자정 초기화 체크 로직
     function checkDailyReset() {
       const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
@@ -392,7 +415,7 @@
       }
     });
 
-    // 🎨 시각적으로 상이하게 구분되는 10가지 음영 컬러 팔레트
+    // 🎨 10가지 고유 파스텔/포인트 컬러 팔레트
     const COLOR_PALETTE = [
       { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7' }, // 1. Mint
       { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' }, // 2. Indigo
@@ -409,12 +432,10 @@
     function getUserColor(userId) {
       if (!userId) return { bg: '#f1f5f9', text: '#64748b', border: '#cbd5e1' };
 
-      // 이미 색상이 지정된 유저인 경우 유지
       if (userColorMap[userId] !== undefined) {
         return COLOR_PALETTE[userColorMap[userId]];
       }
 
-      // 새 유저일 경우 사용 순서대로 색상 번호(0~9) 부여
       const assignedCount = Object.keys(userColorMap).length;
       const colorIndex = assignedCount % COLOR_PALETTE.length;
       userColorMap[userId] = colorIndex;
