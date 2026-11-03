@@ -255,7 +255,7 @@
   </div>
 
 
-  <!-- 📌 3️⃣ 체크인 전용 로그인 모달 (도메인 없는 깔끔한 팝업) -->
+  <!-- 📌 3️⃣ 체크인 전용 로그인 모달 -->
   <div id="checkInModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
     <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl border border-slate-200 space-y-4">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -284,7 +284,7 @@
   </div>
 
 
-  <!-- 📌 커스텀 알림 모달 (브라우저 기본 팝업 및 도메인 노출 방지) -->
+  <!-- 📌 커스텀 알림 모달 -->
   <div id="customAlertModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
     <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl border border-slate-200 text-center space-y-4">
       <div id="customAlertIcon" class="text-3xl">📢</div>
@@ -324,8 +324,8 @@
     document.getElementById('bgImg').src = BANNER_IMAGE;
 
     let currentLang = 'kor';
-    let loggedInUser = null; // 로그인된 유저 정보 { id, pw }
-    let selectedSlots = new Set(); // 현재 선택(음영)된 시간대 키 목록
+    let loggedInUser = null;
+    let selectedSlots = new Set();
 
     // 🕒 한국 시간(KST) 기준 00:00 자정 초기화 체크 로직
     function checkDailyReset() {
@@ -340,7 +340,6 @@
     }
     checkDailyReset();
 
-    // 데이터 저장소 (로컬 스토리지 연동)
     let slotData = JSON.parse(localStorage.getItem('joma_slot_data') || '{}');
 
     function saveSlotData() {
@@ -391,7 +390,6 @@
       }
     });
 
-    // 🎨 유저 ID 기반 고유 색상 생성
     function getUserColor(userId) {
       if (!userId) return { bg: '#f1f5f9', text: '#64748b', border: '#cbd5e1' };
       let hash = 0;
@@ -406,11 +404,12 @@
       };
     }
 
+    // 📌 보스 목록 (Red Book & Lazuli -> Library 로 명칭 및 이미지 수정)
     const bossList = [
       { id: 'apapa', name: 'Apapa', time: '<15mins>', img: 'apapa.jpg' },
       { id: 'glucose', name: 'Glucose', time: '<30mins>', img: 'glucose.jpg' },
       { id: 'overload', name: 'Overload', time: '<30mins>', img: 'overload.jpg' },
-      { id: 'redbook', name: 'Red Book & Lazuli', time: '<30mins>', img: 'redbook.jpg' }
+      { id: 'library', name: 'Library', time: '<30mins>', img: 'library.jpg' }
     ];
 
     function initBossTimeline() {
@@ -480,7 +479,6 @@
       renderSlots();
     }
 
-    // 슬롯 렌더링 반영
     function renderSlots() {
       Object.keys(slotData).forEach(key => {
         const data = slotData[key];
@@ -497,7 +495,6 @@
       });
     }
 
-    // 📌 상단 메인 버튼 동작 (로그인 전: Check In / 로그인 후: Reserve)
     function handleMainAction() {
       if (!loggedInUser) {
         document.getElementById('checkInModal').classList.remove('hidden');
@@ -510,7 +507,6 @@
       document.getElementById('checkInModal').classList.add('hidden');
     }
 
-    // 📌 ID / PW 로그인 처리
     function submitCheckInLogin() {
       const id = document.getElementById('chk-id').value.trim();
       const pw = document.getElementById('chk-pw').value.trim();
@@ -526,7 +522,6 @@
       document.getElementById('chk-id').value = '';
       document.getElementById('chk-pw').value = '';
 
-      // 상단 버튼을 Reserve로 전환
       updateMainButtonToReserve();
       showCustomAlert(langData.alert_checked_in || "체크인되었습니다!");
     }
@@ -537,14 +532,12 @@
       textElem.innerText = i18nData[currentLang]['btn_reserve'] || "Reserve";
     }
 
-    // 📌 스케줄 시간대 클릭 (로그인 후 음영 표시 및 선택, 기점유 항목은 PW 검증 후 삭제/수정)
     function handleSlotClick(bossId, period, hour) {
       const key = `${bossId}-${period}-${hour}`;
       const existing = slotData[key];
       const langData = i18nData[currentLang] || i18nData['kor'];
 
       if (existing && existing.id) {
-        // 이미 예약된 셀인 경우 PW 검증 후 취소 가능
         let inputPw = promptModalReplacement(langData.prompt_enter_pw || "비밀번호를 입력해주세요.");
         if (inputPw === null) return;
 
@@ -566,19 +559,16 @@
         return;
       }
 
-      // 로그인을 안 했다면 먼저 로그인 창 띄우기
       if (!loggedInUser) {
         document.getElementById('checkInModal').classList.remove('hidden');
         return;
       }
 
-      // 빈 칸 클릭 시 음영(선택) 토글
       if (selectedSlots.has(key)) {
         selectedSlots.delete(key);
         document.getElementById(`slot-${key}`).style.backgroundColor = '';
         document.getElementById(`slot-${key}`).style.borderColor = '';
       } else {
-        // 보스당 최대 6시간 제한 검사
         let userBossCount = 0;
         Object.keys(slotData).forEach(k => {
           if (k.startsWith(`${bossId}-`) && slotData[k]?.id === loggedInUser.id) userBossCount++;
@@ -599,7 +589,6 @@
       }
     }
 
-    // 📌 Reserve 버튼 클릭 시 최종 예약 완료
     function executeReservation() {
       const langData = i18nData[currentLang] || i18nData['kor'];
 
@@ -619,7 +608,6 @@
       showCustomAlert(langData.alert_reserved || "예약이 완료되었습니다!");
     }
 
-    // 커스텀 알림 창 띄우기
     function showCustomAlert(message) {
       document.getElementById('customAlertText').innerText = message;
       document.getElementById('customAlertModal').classList.remove('hidden');
@@ -630,14 +618,13 @@
     }
 
     function promptModalReplacement(msg) {
-      return prompt(msg); // 브라우저 도메인 노출 없는 기본 팝업 대안용
+      return prompt(msg);
     }
 
     function confirmModalReplacement(msg) {
       return confirm(msg);
     }
 
-    // 🌐 언어별 데이터 사전 (ENG/KOR 하위 항목 완벽 영어 표기 포함)
     const i18nData = {
       kor: {
         subtitle: "길드 운영 및 출석체크 주요 링크 모음",
@@ -788,7 +775,6 @@
         }
       });
 
-      // 버튼 텍스트 동기화
       const mainBtnText = document.getElementById('mainActionText');
       if (loggedInUser) {
         mainBtnText.innerText = i18nData[lang]['btn_reserve'] || "Reserve";
