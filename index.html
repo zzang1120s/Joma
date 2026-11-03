@@ -80,7 +80,6 @@
         <span>📜</span> Rules & Operating Systems
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
         <a href="https://tinyurl.com/2y3us57m" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-emerald-700 group-hover:text-emerald-600">Operational Rules</div>
@@ -88,7 +87,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📖</span>
         </a>
-
         <a href="https://tinyurl.com/4vn89kwe" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-emerald-600">Inotia Split Rule</div>
@@ -96,7 +94,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">⚖️</span>
         </a>
-
         <a href="https://tinyurl.com/a8t5ea9j" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-emerald-600">Dice Requirements</div>
@@ -104,11 +101,10 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎲</span>
         </a>
-
       </div>
     </section>
 
-    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & Check In 버튼 -->
+    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & Check In / Reserve 버튼 -->
     <section class="space-y-4">
       <div class="flex justify-between items-center flex-wrap gap-2">
         <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
@@ -116,10 +112,10 @@
         </h2>
         
         <div class="flex items-center gap-3">
-          <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold">Max 6 Hours per User</span>
-          <!-- 📌 Check In 메인 버튼 -->
-          <button onclick="openCheckInModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
-            <span>📝</span> <span data-i18n="btn_checkin">Check In</span>
+          <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold" data-i18n="max_notice">Max 6 Hours per User (KST Reset 00:00)</span>
+          <!-- 📌 동적 버튼 (Check In 또는 Reserve) -->
+          <button id="mainActionButton" onclick="handleMainAction()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
+            <span>📝</span> <span id="mainActionText" data-i18n="btn_checkin">Check In</span>
           </button>
         </div>
       </div>
@@ -139,7 +135,6 @@
         <span>📅</span> Attendance & Siege Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
         <div onclick="openFormModal('Submit Attendance', 'https://forms.gle/tr7efn8AtNcjigB8A')" class="cursor-pointer card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Submit Attendance</div>
@@ -147,7 +142,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📝</span>
         </div>
-
         <a href="https://tinyurl.com/5d63wcn8" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-amber-600">Attendance Check</div>
@@ -155,7 +149,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📊</span>
         </a>
-
         <div onclick="openFormModal('Add Siege Point (Joma)', 'https://forms.gle/HHEoWFk9pUtEyy7F6')" class="cursor-pointer card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-amber-700 group-hover:text-amber-600">Add Siege Point (Joma)</div>
@@ -163,7 +156,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏰</span>
         </div>
-
         <a href="https://tinyurl.com/mwd6ah2s" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-amber-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-amber-600">View Siege Point (Joma)</div>
@@ -171,7 +163,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📈</span>
         </a>
-
       </div>
     </section>
 
@@ -181,7 +172,6 @@
         <span>⚔️</span> Roster & Enemy Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
         <a href="https://tinyurl.com/39ur6w9a" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-rose-600">Grade List</div>
@@ -189,7 +179,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🎖️</span>
         </a>
-
         <a href="https://tinyurl.com/2s42m428" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-rose-500 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-rose-700 group-hover:text-rose-600">KOS List</div>
@@ -197,7 +186,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">💀</span>
         </a>
-
       </div>
     </section>
 
@@ -207,7 +195,6 @@
         <span>💎</span> Economy & Loot Management
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
         <a href="https://tinyurl.com/5eszcac2" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Bank Monitor</div>
@@ -215,7 +202,6 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏦</span>
         </a>
-
         <a href="https://tinyurl.com/4scd9597" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
             <div class="font-bold text-slate-800 group-hover:text-cyan-600">Loot List</div>
@@ -223,15 +209,13 @@
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">📦</span>
         </a>
-
         <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-cyan-600">Item Price</div>
+            <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Item Price</div>
             <div data-i18n="ecn_price" class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
         </a>
-
       </div>
     </section>
 
@@ -241,98 +225,71 @@
         <span>📸</span> <span data-i18n="cat_memories">Our Memories</span>
       </h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-
         <div onclick="openImageModal('photo1.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
           <img src="photo1.jpg" alt="photo1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo1.jpg'">
           <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
           </div>
         </div>
-
         <div onclick="openImageModal('photo2.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
           <img src="photo2.jpg" alt="photo2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo2.jpg'">
           <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
           </div>
         </div>
-
         <div onclick="openImageModal('photo3.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
           <img src="photo3.jpg" alt="photo3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo3.jpg'">
           <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
           </div>
         </div>
-
         <div onclick="openImageModal('photo4.jpg')" class="group cursor-pointer relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition card-hover aspect-square">
           <img src="photo4.jpg" alt="photo4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=photo4.jpg'">
           <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span class="text-white text-xs font-bold bg-slate-900/80 px-2.5 py-1 rounded-full">🔍 View</span>
           </div>
         </div>
-
       </div>
     </section>
 
   </div>
 
 
-  <!-- 📌 3️⃣ Check In 전용 모달 (ID/PW 입력 및 보스/시간대 선택) -->
+  <!-- 📌 3️⃣ 체크인 전용 로그인 모달 (도메인 없는 깔끔한 팝업) -->
   <div id="checkInModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
-    <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl border border-slate-200 space-y-4">
+    <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl border border-slate-200 space-y-4">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 class="font-black text-slate-800 text-lg flex items-center gap-2">
-          <span>📝</span> <span data-i18n="modal_checkin_title">Check In Schedule</span>
+        <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
+          <span>🔐</span> <span data-i18n="modal_checkin_title">Check In Login</span>
         </h3>
         <button onclick="closeCheckInModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
       </div>
 
       <div class="space-y-3">
-        <!-- ID 입력 -->
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_id">Character ID (IGN)</label>
-          <input type="text" id="chk-id" placeholder="Enter Character ID" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
+          <input type="text" id="chk-id" placeholder="Enter ID" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
         </div>
-        <!-- PW 입력 -->
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_pw">Password (For Edit/Delete)</label>
-          <input type="password" id="chk-pw" placeholder="Enter 4-digit PW" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
-        </div>
-        <!-- Boss 선택 -->
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_boss">Select Boss</label>
-          <select id="chk-boss" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
-            <option value="apapa">Apapa &lt;15mins&gt;</option>
-            <option value="glucose">Glucose &lt;30mins&gt;</option>
-            <option value="overload">Overload &lt;30mins&gt;</option>
-            <option value="redbook">Red Book & Lazuli &lt;30mins&gt;</option>
-          </select>
-        </div>
-        <!-- Time Period & Hour 선택 -->
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_period">AM / PM</label>
-            <select id="chk-period" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_hour">Hour (1-12)</label>
-            <select id="chk-hour" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
-              <!-- 1부터 12까지 생성 -->
-              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-              <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-              <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-              <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-            </select>
-          </div>
+          <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="label_pw">Password</label>
+          <input type="password" id="chk-pw" placeholder="Enter Password" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-indigo-500">
         </div>
       </div>
 
       <div class="pt-2 flex justify-end gap-2">
         <button onclick="closeCheckInModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-300 transition" data-i18n="btn_cancel">Cancel</button>
-        <button onclick="submitCheckIn()" class="px-5 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-indigo-700 shadow transition" data-i18n="btn_submit">Check In</button>
+        <button onclick="submitCheckInLogin()" class="px-5 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-indigo-700 shadow transition" data-i18n="btn_login">Login</button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- 📌 커스텀 알림 모달 (브라우저 기본 팝업 및 도메인 노출 방지) -->
+  <div id="customAlertModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl border border-slate-200 text-center space-y-4">
+      <div id="customAlertIcon" class="text-3xl">📢</div>
+      <p id="customAlertText" class="font-bold text-slate-800 text-sm whitespace-pre-line"></p>
+      <button onclick="closeCustomAlert()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition" data-i18n="btn_confirm">확인</button>
     </div>
   </div>
 
@@ -367,10 +324,33 @@
     document.getElementById('bgImg').src = BANNER_IMAGE;
 
     let currentLang = 'kor';
+    let loggedInUser = null; // 로그인된 유저 정보 { id, pw }
+    let selectedSlots = new Set(); // 현재 선택(음영)된 시간대 키 목록
+
+    // 🕒 한국 시간(KST) 기준 00:00 자정 초기화 체크 로직
+    function checkDailyReset() {
+      const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+      const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+      const lastResetDate = localStorage.getItem('joma_reset_date');
+
+      if (lastResetDate !== todayStr) {
+        localStorage.removeItem('joma_slot_data');
+        localStorage.setItem('joma_reset_date', todayStr);
+      }
+    }
+    checkDailyReset();
+
+    // 데이터 저장소 (로컬 스토리지 연동)
+    let slotData = JSON.parse(localStorage.getItem('joma_slot_data') || '{}');
+
+    function saveSlotData() {
+      localStorage.setItem('joma_slot_data', JSON.stringify(slotData));
+    }
 
     function goToMain() {
       document.getElementById('landingScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
+      initBossTimeline();
     }
 
     function openFormModal(title, formUrl) {
@@ -407,18 +387,17 @@
         closeFormModal();
         closeImageModal();
         closeCheckInModal();
+        closeCustomAlert();
       }
     });
 
-    // 🎨 유저 ID 기반 고유 색상(Color-Coding) 생성 함수
+    // 🎨 유저 ID 기반 고유 색상 생성
     function getUserColor(userId) {
       if (!userId) return { bg: '#f1f5f9', text: '#64748b', border: '#cbd5e1' };
-      
       let hash = 0;
       for (let i = 0; i < userId.length; i++) {
         hash = userId.charCodeAt(i) + ((hash << 5) - hash);
       }
-      
       const hue = Math.abs(hash) % 360;
       return {
         bg: `hsl(${hue}, 85%, 92%)`,
@@ -426,9 +405,6 @@
         border: `hsl(${hue}, 70%, 75%)`
       };
     }
-
-    // 데이터 저장소 (내부 state)
-    const slotData = {}; // key: `boss-period-hour`, val: { id, pw }
 
     const bossList = [
       { id: 'apapa', name: 'Apapa', time: '<15mins>', img: 'apapa.jpg' },
@@ -463,10 +439,11 @@
         `;
 
         for (let i = 1; i <= 12; i++) {
+          const key = `${boss.id}-AM-${i}`;
           timeGrid += `
-            <div onclick="handleSlotClick('${boss.id}', 'AM', ${i})" id="slot-${boss.id}-AM-${i}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+            <div onclick="handleSlotClick('${boss.id}', 'AM', ${i})" id="slot-${key}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
               <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
-              <span id="text-${boss.id}-AM-${i}" class="text-[9px] font-black truncate w-full hidden"></span>
+              <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
             </div>
           `;
         }
@@ -481,10 +458,11 @@
         `;
 
         for (let i = 1; i <= 12; i++) {
+          const key = `${boss.id}-PM-${i}`;
           timeGrid += `
-            <div onclick="handleSlotClick('${boss.id}', 'PM', ${i})" id="slot-${boss.id}-PM-${i}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+            <div onclick="handleSlotClick('${boss.id}', 'PM', ${i})" id="slot-${key}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
               <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
-              <span id="text-${boss.id}-PM-${i}" class="text-[9px] font-black truncate w-full hidden"></span>
+              <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
             </div>
           `;
         }
@@ -498,89 +476,84 @@
         row.innerHTML = profile + timeGrid;
         container.appendChild(row);
       });
+
+      renderSlots();
     }
 
-    // Check In 모달 제어
-    function openCheckInModal() {
-      document.getElementById('checkInModal').classList.remove('hidden');
+    // 슬롯 렌더링 반영
+    function renderSlots() {
+      Object.keys(slotData).forEach(key => {
+        const data = slotData[key];
+        const slotElem = document.getElementById(`slot-${key}`);
+        const textElem = document.getElementById(`text-${key}`);
+        if (slotElem && textElem && data) {
+          const color = getUserColor(data.id);
+          textElem.innerText = data.id;
+          textElem.classList.remove('hidden');
+          textElem.style.color = color.text;
+          slotElem.style.backgroundColor = color.bg;
+          slotElem.style.borderColor = color.border;
+        }
+      });
+    }
+
+    // 📌 상단 메인 버튼 동작 (로그인 전: Check In / 로그인 후: Reserve)
+    function handleMainAction() {
+      if (!loggedInUser) {
+        document.getElementById('checkInModal').classList.remove('hidden');
+      } else {
+        executeReservation();
+      }
     }
 
     function closeCheckInModal() {
       document.getElementById('checkInModal').classList.add('hidden');
     }
 
-    // 모달을 통한 Check In 제출
-    function submitCheckIn() {
+    // 📌 ID / PW 로그인 처리
+    function submitCheckInLogin() {
       const id = document.getElementById('chk-id').value.trim();
       const pw = document.getElementById('chk-pw').value.trim();
-      const boss = document.getElementById('chk-boss').value;
-      const period = document.getElementById('chk-period').value;
-      const hour = document.getElementById('chk-hour').value;
-
       const langData = i18nData[currentLang] || i18nData['kor'];
 
       if (!id || !pw) {
-        alert(langData.alert_empty_input || "ID와 비밀번호를 모두 입력해주세요.");
+        showCustomAlert(langData.alert_empty_input || "ID와 비밀번호를 모두 입력해주세요.");
         return;
       }
 
-      applyCheckIn(boss, period, hour, id, pw);
+      loggedInUser = { id, pw };
       closeCheckInModal();
       document.getElementById('chk-id').value = '';
       document.getElementById('chk-pw').value = '';
+
+      // 상단 버튼을 Reserve로 전환
+      updateMainButtonToReserve();
+      showCustomAlert(langData.alert_checked_in || "체크인되었습니다!");
     }
 
-    // 스케줄 할당 및 유저별 색상 적용
-    function applyCheckIn(bossId, period, hour, id, pw) {
-      const langData = i18nData[currentLang] || i18nData['kor'];
-      
-      // 6시간 제한 검사
-      let userCount = 0;
-      Object.keys(slotData).forEach(key => {
-        if (key.startsWith(`${bossId}-`) && slotData[key]?.id === id) {
-          if (key !== `${bossId}-${period}-${hour}`) userCount++;
-        }
-      });
-
-      if (userCount >= 6) {
-        alert(langData.limit_alert.replace('{name}', id));
-        return;
-      }
-
-      // 데이터 저장
-      const key = `${bossId}-${period}-${hour}`;
-      slotData[key] = { id, pw };
-
-      // UI 및 유저 고유 색상 업데이트
-      const slotElem = document.getElementById(`slot-${key}`);
-      const textElem = document.getElementById(`text-${key}`);
-      const color = getUserColor(id);
-
-      textElem.innerText = id;
-      textElem.classList.remove('hidden');
-      textElem.style.color = color.text;
-
-      slotElem.style.backgroundColor = color.bg;
-      slotElem.style.borderColor = color.border;
+    function updateMainButtonToReserve() {
+      const textElem = document.getElementById('mainActionText');
+      textElem.setAttribute('data-i18n', 'btn_reserve');
+      textElem.innerText = i18nData[currentLang]['btn_reserve'] || "Reserve";
     }
 
-    // 셀 직접 클릭 시 (수정 / 삭제 - PW 검증)
+    // 📌 스케줄 시간대 클릭 (로그인 후 음영 표시 및 선택, 기점유 항목은 PW 검증 후 삭제/수정)
     function handleSlotClick(bossId, period, hour) {
       const key = `${bossId}-${period}-${hour}`;
       const existing = slotData[key];
       const langData = i18nData[currentLang] || i18nData['kor'];
 
       if (existing && existing.id) {
-        // 이미 등록된 셀 -> PW 입력 후 삭제/수정
-        const inputPw = prompt(`[${existing.id}] ${langData.prompt_enter_pw}`);
+        // 이미 예약된 셀인 경우 PW 검증 후 취소 가능
+        let inputPw = promptModalReplacement(langData.prompt_enter_pw || "비밀번호를 입력해주세요.");
         if (inputPw === null) return;
 
         if (inputPw === existing.pw) {
-          if (confirm(langData.confirm_delete)) {
+          if (confirmModalReplacement(langData.confirm_delete || "예약을 취소하시겠습니까?")) {
             delete slotData[key];
+            saveSlotData();
             const slotElem = document.getElementById(`slot-${key}`);
             const textElem = document.getElementById(`text-${key}`);
-            
             textElem.innerText = '';
             textElem.classList.add('hidden');
             slotElem.style.backgroundColor = '';
@@ -588,20 +561,83 @@
             slotElem.className = "h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative";
           }
         } else {
-          alert(langData.alert_pw_wrong || "비밀번호가 일치하지 않습니다.");
+          showCustomAlert(langData.alert_pw_wrong || "비밀번호가 일치하지 않습니다.");
         }
+        return;
+      }
+
+      // 로그인을 안 했다면 먼저 로그인 창 띄우기
+      if (!loggedInUser) {
+        document.getElementById('checkInModal').classList.remove('hidden');
+        return;
+      }
+
+      // 빈 칸 클릭 시 음영(선택) 토글
+      if (selectedSlots.has(key)) {
+        selectedSlots.delete(key);
+        document.getElementById(`slot-${key}`).style.backgroundColor = '';
+        document.getElementById(`slot-${key}`).style.borderColor = '';
       } else {
-        // 빈 셀 클릭 시 바로 모달 오픈 & 선택값 세팅
-        document.getElementById('chk-boss').value = bossId;
-        document.getElementById('chk-period').value = period;
-        document.getElementById('chk-hour').value = hour;
-        openCheckInModal();
+        // 보스당 최대 6시간 제한 검사
+        let userBossCount = 0;
+        Object.keys(slotData).forEach(k => {
+          if (k.startsWith(`${bossId}-`) && slotData[k]?.id === loggedInUser.id) userBossCount++;
+        });
+        selectedSlots.forEach(k => {
+          if (k.startsWith(`${bossId}-`)) userBossCount++;
+        });
+
+        if (userBossCount >= 6) {
+          showCustomAlert(langData.limit_alert.replace('{name}', loggedInUser.id));
+          return;
+        }
+
+        selectedSlots.add(key);
+        const color = getUserColor(loggedInUser.id);
+        document.getElementById(`slot-${key}`).style.backgroundColor = color.bg;
+        document.getElementById(`slot-${key}`).style.borderColor = color.border;
       }
     }
 
-    initBossTimeline();
+    // 📌 Reserve 버튼 클릭 시 최종 예약 완료
+    function executeReservation() {
+      const langData = i18nData[currentLang] || i18nData['kor'];
 
-    // 🌐 언어별 데이터 사전
+      if (selectedSlots.size === 0) {
+        showCustomAlert(langData.alert_no_selection || "예약할 시간대를 선택해주세요.");
+        return;
+      }
+
+      selectedSlots.forEach(key => {
+        slotData[key] = { id: loggedInUser.id, pw: loggedInUser.pw };
+      });
+
+      saveSlotData();
+      renderSlots();
+      selectedSlots.clear();
+
+      showCustomAlert(langData.alert_reserved || "예약이 완료되었습니다!");
+    }
+
+    // 커스텀 알림 창 띄우기
+    function showCustomAlert(message) {
+      document.getElementById('customAlertText').innerText = message;
+      document.getElementById('customAlertModal').classList.remove('hidden');
+    }
+
+    function closeCustomAlert() {
+      document.getElementById('customAlertModal').classList.add('hidden');
+    }
+
+    function promptModalReplacement(msg) {
+      return prompt(msg); // 브라우저 도메인 노출 없는 기본 팝업 대안용
+    }
+
+    function confirmModalReplacement(msg) {
+      return confirm(msg);
+    }
+
+    // 🌐 언어별 데이터 사전 (ENG/KOR 하위 항목 완벽 영어 표기 포함)
     const i18nData = {
       kor: {
         subtitle: "길드 운영 및 출석체크 주요 링크 모음",
@@ -619,20 +655,23 @@
         ecn_loot: "획득 전리품 및 아이템 목록",
         ecn_price: "아이템 별 시세 기준표",
         cat_memories: "Our Memories (우리의 추억)",
-        btn_checkin: "체크인",
-        modal_checkin_title: "보스 스케줄 체크인",
-        label_id: "캐릭터 아이디 (IGN)",
-        label_pw: "비밀번호 (수정/삭제용)",
-        label_boss: "보스 선택",
-        label_period: "AM / PM",
-        label_hour: "시간대 (1-12시)",
-        btn_cancel: "취소",
-        btn_submit: "등록하기",
-        alert_empty_input: "아이디와 비밀번호를 모두 입력해주세요.",
-        limit_alert: "'{name}' 유저는 해당 보스에서 이미 6시간을 점유하셨습니다.",
-        prompt_enter_pw: "비밀번호를 입력해주세요.",
-        confirm_delete: "해당 점유 내역을 삭제하시겠습니까?",
-        alert_pw_wrong: "비밀번호가 일치하지 않습니다."
+        max_notice: "Max 6 Hours per User (KST Reset 00:00)",
+        btn_checkin: "Check In",
+        btn_reserve: "Reserve",
+        modal_checkin_title: "Check In Login",
+        label_id: "Character ID (IGN)",
+        label_pw: "Password",
+        btn_cancel: "Cancel",
+        btn_login: "Login",
+        btn_confirm: "Confirm",
+        alert_empty_input: "Please enter both ID and Password.",
+        alert_checked_in: "Checked in successfully!",
+        alert_reserved: "Reservation completed successfully!",
+        alert_no_selection: "Please select time slots to reserve.",
+        limit_alert: "'{name}' has already reached the 6-hour limit for this boss.",
+        prompt_enter_pw: "Enter password to cancel reservation:",
+        confirm_delete: "Are you sure you want to cancel this reservation?",
+        alert_pw_wrong: "Incorrect password."
       },
       php: {
         subtitle: "Mga pangunahing link para sa guild operation at attendance",
@@ -650,20 +689,23 @@
         ecn_loot: "Listahan ng mga nakuhang loot at gamit",
         ecn_price: "Talahanayan ng presyo ng mga item",
         cat_memories: "Our Memories (Ating Mga Alaala)",
+        max_notice: "Max 6 oras bawat miyembro (Reset sa 00:00 KST)",
         btn_checkin: "Check In",
-        modal_checkin_title: "Check In Schedule",
+        btn_reserve: "Reserve",
+        modal_checkin_title: "Login sa Check In",
         label_id: "Character ID (IGN)",
-        label_pw: "Password (For Edit/Delete)",
-        label_boss: "Select Boss",
-        label_period: "AM / PM",
-        label_hour: "Hour (1-12)",
-        btn_cancel: "Cancel",
-        btn_submit: "Check In",
-        alert_empty_input: "Mangyaring ilagay ang parehong ID at Password.",
-        limit_alert: "Si '{name}' ay may 6 oras na sa boss na ito.",
-        prompt_enter_pw: "Mangyaring ilagay ang Password.",
-        confirm_delete: "Gusto mo bang burahin ang reservation na ito?",
-        alert_pw_wrong: "Maling Password."
+        label_pw: "Password",
+        btn_cancel: "Kanselahin",
+        btn_submit: "Mag-login",
+        btn_confirm: "Kumpirmahin",
+        alert_empty_input: "Ilagay ang ID at Password.",
+        alert_checked_in: "Matagumpay na nag-check in!",
+        alert_reserved: "Nakumpleto na ang reservation!",
+        alert_no_selection: "Pumili ng oras para sa reservation.",
+        limit_alert: "Si '{name}' ay umabot na sa 6 oras sa boss na ito.",
+        prompt_enter_pw: "Ilagay ang password:",
+        confirm_delete: "Gusto mo bang kanselahin?",
+        alert_pw_wrong: "Maling password."
       },
       idn: {
         subtitle: "Kumpulan tautan utama untuk operasional guild & kehadiran",
@@ -681,19 +723,22 @@
         ecn_loot: "Daftar item & hasil jarahan",
         ecn_price: "Tabel standar harga item",
         cat_memories: "Our Memories (Kenangan Kita)",
+        max_notice: "Maks 6 Jam per User (Reset KST 00:00)",
         btn_checkin: "Check In",
-        modal_checkin_title: "Check In Schedule",
+        btn_reserve: "Reserve",
+        modal_checkin_title: "Login Check In",
         label_id: "Character ID (IGN)",
-        label_pw: "Password (For Edit/Delete)",
-        label_boss: "Select Boss",
-        label_period: "AM / PM",
-        label_hour: "Hour (1-12)",
+        label_pw: "Password",
         btn_cancel: "Batal",
-        btn_submit: "Check In",
+        btn_submit: "Masuk",
+        btn_confirm: "Konfirmasi",
         alert_empty_input: "Harap masukkan ID dan Password.",
-        limit_alert: "'{name}' sudah mengambil 6 jam untuk boss ini.",
-        prompt_enter_pw: "Masukkan Password Anda.",
-        confirm_delete: "Apakah Anda yakin ingin menghapus jadwal ini?",
+        alert_checked_in: "Berhasil check in!",
+        alert_reserved: "Reservasi berhasil diselesaikan!",
+        alert_no_selection: "Pilih waktu untuk reservasi.",
+        limit_alert: "'{name}' sudah mencapai batas 6 jam untuk boss ini.",
+        prompt_enter_pw: "Masukkan password:",
+        confirm_delete: "Batalkan reservasi ini?",
         alert_pw_wrong: "Password salah."
       },
       chn: {
@@ -712,19 +757,22 @@
         ecn_loot: "战利品及获得的物品清单",
         ecn_price: "各物品价格标准表",
         cat_memories: "Our Memories (我们的回忆)",
-        btn_checkin: "签到登记",
-        modal_checkin_title: "Boss时间段登记",
+        max_notice: "每人最多6小时 (KST 00:00重置)",
+        btn_checkin: "Check In",
+        btn_reserve: "Reserve",
+        modal_checkin_title: "签到登录",
         label_id: "游戏角色ID (IGN)",
-        label_pw: "密码 (用于修改/删除)",
-        label_boss: "选择Boss",
-        label_period: "AM / PM",
-        label_hour: "时间段 (1-12点)",
+        label_pw: "密码",
         btn_cancel: "取消",
-        btn_submit: "提交登记",
+        btn_submit: "登录",
+        btn_confirm: "确定",
         alert_empty_input: "请输入ID和密码。",
-        limit_alert: "'{name}' 玩家在该Boss已占用6小时。",
-        prompt_enter_pw: "请输入密码。",
-        confirm_delete: "确定要删除该登记记录吗？",
+        alert_checked_in: "签到成功！",
+        alert_reserved: "预约已完成！",
+        alert_no_selection: "请选择要预约的时间段。",
+        limit_alert: "'{name}' 玩家在该Boss已达到6小时上限。",
+        prompt_enter_pw: "请输入密码以取消预约：",
+        confirm_delete: "确定要取消该预约吗？",
         alert_pw_wrong: "密码错误。"
       }
     };
@@ -740,6 +788,14 @@
         }
       });
 
+      // 버튼 텍스트 동기화
+      const mainBtnText = document.getElementById('mainActionText');
+      if (loggedInUser) {
+        mainBtnText.innerText = i18nData[lang]['btn_reserve'] || "Reserve";
+      } else {
+        mainBtnText.innerText = i18nData[lang]['btn_checkin'] || "Check In";
+      }
+
       const buttons = {
         kor: document.getElementById('btn-kor'),
         php: document.getElementById('btn-php'),
@@ -748,10 +804,12 @@
       };
 
       Object.keys(buttons).forEach(key => {
-        if (key === lang) {
-          buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow";
-        } else {
-          buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900";
+        if (buttons[key]) {
+          if (key === lang) {
+            buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition bg-amber-500 text-slate-950 shadow";
+          } else {
+            buttons[key].className = "lang-btn px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900";
+          }
         }
       });
     }
