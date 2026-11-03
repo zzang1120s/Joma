@@ -115,6 +115,100 @@
       </div>
     </section>
 
+    <!-- ⏰ 신규 추가: 미니 보스 스케줄 및 시간 배분 그래프 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
+        <span>⏰</span> Mini-Bosses Schedule & Time Allocation <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 font-normal">Max 6 Hours per Boss</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- 1. Apapa -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <!-- 이미지 영역 (원하는 파일명으로 교체 가능) -->
+            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
+              <img src="apapa.jpg" alt="Apapa" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Apapa'">
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-slate-800 text-sm">Apapa</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;15mins&gt;</span>
+            </div>
+          </div>
+          <!-- 가로형 시간 배분 그래프 (6시간 슬롯) -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+              <span>Time Slots (Max 6h)</span>
+              <span id="count-apapa" class="text-indigo-600 font-bold">0 / 6h</span>
+            </div>
+            <div class="grid grid-cols-6 gap-1" id="slots-apapa">
+              <!-- JS로 6개 슬롯 생성 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Glucose -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
+              <img src="glucose.jpg" alt="Glucose" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Glucose'">
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-slate-800 text-sm">Glucose</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;30mins&gt;</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+              <span>Time Slots (Max 6h)</span>
+              <span id="count-glucose" class="text-indigo-600 font-bold">0 / 6h</span>
+            </div>
+            <div class="grid grid-cols-6 gap-1" id="slots-glucose"></div>
+          </div>
+        </div>
+
+        <!-- 3. Overload -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
+              <img src="overload.jpg" alt="Overload" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Overload'">
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-slate-800 text-sm">Overload</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">&lt;30mins&gt;</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+              <span>Time Slots (Max 6h)</span>
+              <span id="count-overload" class="text-indigo-600 font-bold">0 / 6h</span>
+            </div>
+            <div class="grid grid-cols-6 gap-1" id="slots-overload"></div>
+          </div>
+        </div>
+
+        <!-- 4. Red Book & Lazuli -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <div class="w-full h-32 bg-slate-100 rounded-lg overflow-hidden mb-3 border border-slate-100">
+              <img src="redbook.jpg" alt="Red Book & Lazuli" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=RedBook+%26+Lazuli'">
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-slate-800 text-sm truncate" title="Red Book & Lazuli">Red Book & Lazuli</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold shrink-0">&lt;30m&gt;</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+              <span>Time Slots (Max 6h)</span>
+              <span id="count-redbook" class="text-indigo-600 font-bold">0 / 6h</span>
+            </div>
+            <div class="grid grid-cols-6 gap-1" id="slots-redbook"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- 카테고리 2: 출석 & 공성 관리 (구글 폼 모달 열기 적용) -->
     <section class="space-y-4">
       <h2 class="text-lg font-bold text-slate-800 border-l-4 border-amber-500 pl-3 flex items-center gap-2">
@@ -210,7 +304,7 @@
 
         <a href="https://tinyurl.com/5ev8e3hv" target="_blank" class="card-hover bg-white hover:bg-slate-50 border border-slate-200 hover:border-cyan-600 p-5 rounded-xl shadow-sm hover:shadow flex items-center justify-between group">
           <div>
-            <div class="font-bold text-slate-800 group-hover:text-cyan-600">Item Price</div>
+            <div class="font-bold text-cyan-700 group-hover:text-cyan-600">Item Price</div>
             <div data-i18n="ecn_price" class="text-xs text-slate-500 mt-1">아이템 별 시세 기준표</div>
           </div>
           <span class="text-xl group-hover:translate-x-1 transition-transform">🏷️</span>
@@ -348,6 +442,45 @@
       }
     });
 
+    // ⏰ 미니 보스 6시간 타임슬롯 초기화 및 토글 로직
+    const bosses = ['apapa', 'glucose', 'overload', 'redbook'];
+    
+    bosses.forEach(boss => {
+      const container = document.getElementById(`slots-${boss}`);
+      for (let i = 1; i <= 6; i++) {
+        const slot = document.createElement('div');
+        slot.className = "h-7 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold text-slate-500";
+        slot.innerText = `${i}h`;
+        slot.dataset.active = "false";
+        
+        slot.onclick = function() {
+          const isActive = slot.dataset.active === "true";
+          if (!isActive) {
+            // 활성화 (최대 6시간 제한 검사)
+            const activeCount = container.querySelectorAll('[data-active="true"]').length;
+            if (activeCount >= 6) {
+              alert("보스당 최대 6시간까지만 점유할 수 있습니다.");
+              return;
+            }
+            slot.dataset.active = "true";
+            slot.className = "h-7 bg-indigo-600 text-white border border-indigo-700 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold shadow-sm";
+          } else {
+            // 비활성화
+            slot.dataset.active = "false";
+            slot.className = "h-7 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex items-center justify-center text-[10px] font-bold text-slate-500";
+          }
+          updateCount(boss);
+        };
+        container.appendChild(slot);
+      }
+    });
+
+    function updateCount(boss) {
+      const container = document.getElementById(`slots-${boss}`);
+      const activeCount = container.querySelectorAll('[data-active="true"]').length;
+      document.getElementById(`count-${boss}`).innerText = `${activeCount} / 6h`;
+    }
+
     // 🌐 언어별 데이터 사전
     const i18nData = {
       kor: {
@@ -394,7 +527,7 @@
         att_check: "Cek status kehadiran saat ini",
         siege_add: "Kirim Poin Siege (Google Form)",
         siege_view: "Lihat akumulasi Poin Siege",
-        rst_grade: "Daftar pangkat & tingkatan anggota guild",
+        rst_grade: "Daftار pangkat & tingkatan anggota guild",
         rst_kos: "Kill on Sight (Daftar musuh & target)",
         ecn_bank: "Status gudang & dana guild",
         ecn_loot: "Daftar item & hasil jarahan",
