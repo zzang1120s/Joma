@@ -113,7 +113,6 @@
         
         <div class="flex items-center gap-3">
           <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold" data-i18n="max_notice">Max 6 Hours per User (KST Reset 00:00)</span>
-          <!-- 📌 동적 버튼 (Check In 또는 Reserve) -->
           <button id="mainActionButton" onclick="handleMainAction()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
             <span>📝</span> <span id="mainActionText" data-i18n="btn_checkin">Check In</span>
           </button>
@@ -335,15 +334,18 @@
 
       if (lastResetDate !== todayStr) {
         localStorage.removeItem('joma_slot_data');
+        localStorage.removeItem('joma_user_color_map');
         localStorage.setItem('joma_reset_date', todayStr);
       }
     }
     checkDailyReset();
 
     let slotData = JSON.parse(localStorage.getItem('joma_slot_data') || '{}');
+    let userColorMap = JSON.parse(localStorage.getItem('joma_user_color_map') || '{}');
 
     function saveSlotData() {
       localStorage.setItem('joma_slot_data', JSON.stringify(slotData));
+      localStorage.setItem('joma_user_color_map', JSON.stringify(userColorMap));
     }
 
     function goToMain() {
@@ -390,21 +392,37 @@
       }
     });
 
+    // 🎨 시각적으로 상이하게 구분되는 10가지 음영 컬러 팔레트
+    const COLOR_PALETTE = [
+      { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7' }, // 1. Mint
+      { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' }, // 2. Indigo
+      { bg: '#ffedd5', text: '#9a3412', border: '#fdba74' }, // 3. Amber
+      { bg: '#f3e8ff', text: '#6b21a8', border: '#d8b4fe' }, // 4. Purple
+      { bg: '#cff4fc', text: '#055160', border: '#6edff6' }, // 5. Cyan
+      { bg: '#ffe4e6', text: '#9f1239', border: '#fecdd3' }, // 6. Rose
+      { bg: '#ecfccb', text: '#3f6212', border: '#bef264' }, // 7. Lime
+      { bg: '#ccfbf1', text: '#115e59', border: '#5eead4' }, // 8. Teal
+      { bg: '#fef3c7', text: '#92400e', border: '#fcd34d' }, // 9. Yellow
+      { bg: '#e2e8f0', text: '#1e293b', border: '#94a3b8' }  // 10. Slate
+    ];
+
     function getUserColor(userId) {
       if (!userId) return { bg: '#f1f5f9', text: '#64748b', border: '#cbd5e1' };
-      let hash = 0;
-      for (let i = 0; i < userId.length; i++) {
-        hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+
+      // 이미 색상이 지정된 유저인 경우 유지
+      if (userColorMap[userId] !== undefined) {
+        return COLOR_PALETTE[userColorMap[userId]];
       }
-      const hue = Math.abs(hash) % 360;
-      return {
-        bg: `hsl(${hue}, 85%, 92%)`,
-        text: `hsl(${hue}, 90%, 25%)`,
-        border: `hsl(${hue}, 70%, 75%)`
-      };
+
+      // 새 유저일 경우 사용 순서대로 색상 번호(0~9) 부여
+      const assignedCount = Object.keys(userColorMap).length;
+      const colorIndex = assignedCount % COLOR_PALETTE.length;
+      userColorMap[userId] = colorIndex;
+      saveSlotData();
+
+      return COLOR_PALETTE[colorIndex];
     }
 
-    // 📌 보스 목록 (Red Book & Lazuli -> Library 로 명칭 및 이미지 수정)
     const bossList = [
       { id: 'apapa', name: 'Apapa', time: '<15mins>', img: 'apapa.jpg' },
       { id: 'glucose', name: 'Glucose', time: '<30mins>', img: 'glucose.jpg' },
