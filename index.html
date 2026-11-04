@@ -109,17 +109,17 @@
       </div>
     </section>
 
-    <!-- ⏰ 미니 보스 24시간 스케줄 타임라인 & KST 실시간 시계 포함 -->
+    <!-- ⏰ 미니 보스 2일간 스케줄 타임라인 & KST 실시간 날짜/시계 -->
     <section class="space-y-4">
       <div class="flex justify-between items-center flex-wrap gap-2">
         <div class="flex items-center gap-3 flex-wrap">
           <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
-            <span>⏰</span> Mini-Bosses Schedule (24-Hour Timeline)
+            <span>⏰</span> Mini-Bosses Schedule (Today & Tomorrow)
           </h2>
-          <!-- 🕒 KST 실시간 시계 배지 (: 삭제 완료) -->
+          <!-- 🕒 KST Day, Month 시:분:초 AM/PM -->
           <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
             <span>KST</span>
-            <span id="kstClock">00:00:00 AM</span>
+            <span id="kstClock">Thu, Nov 5 00:00:00 AM</span>
           </div>
         </div>
         
@@ -132,8 +132,8 @@
       </div>
 
       <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm overflow-x-auto">
-        <div class="min-w-[800px] space-y-3">
-          <div id="boss-schedule-container" class="space-y-4 divide-y divide-slate-100">
+        <div class="min-w-[900px] space-y-6">
+          <div id="boss-schedule-container" class="space-y-6 divide-y divide-slate-200">
             <!-- JS 동적 생성 -->
           </div>
         </div>
@@ -355,67 +355,83 @@
     let currentLang = 'kor';
     let loggedInUser = null;
     let selectedSlots = new Set();
-    let slotData = {};
+    let slotData = { today: {}, tomorrow: {} };
     let userColorMap = {};
 
-    // 🕒 KST 실시간 시계 구동 함수 (KST 시시:분분:초초 AM/PM 형태로 수정완료)
+    // 🕒 KST 실시간 날짜/시계 (KST Day, Month 시:분:초 AM/PM)
     function updateKSTClock() {
       const now = new Date();
-      const options = { 
-        timeZone: 'Asia/Seoul', 
-        hour12: true, 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit' 
-      };
-      // 'KST' 글자와 콜론 간격을 정리한 출력
-      const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
-      document.getElementById('kstClock').innerText = timeString;
+      const dateOptions = { timeZone: 'Asia/Seoul', weekday: 'short', month: 'short', day: 'numeric' };
+      const timeOptions = { timeZone: 'Asia/Seoul', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      
+      const dateStr = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+      const timeStr = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+      
+      document.getElementById('kstClock').innerText = `${dateStr} ${timeStr}`;
     }
     setInterval(updateKSTClock, 1000);
     updateKSTClock();
 
-    // 🕒 한국 시간(KST) 기준 00:00 자정 자동 초기화 로직
-    async function checkDailyReset(serverResetDate) {
-      const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-      const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+    function getKSTDateString(offsetDays = 0) {
+      const now = new Date();
+      const kstDate = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+      kstDate.setDate(kstDate.getDate() + offsetDays);
+      return `${kstDate.getFullYear()}-${kstDate.getMonth() + 1}-${kstDate.getDate()}`;
+    }
 
-      // 서버의 저장된 날짜가 오늘 날짜와 다르면 DB 초기화
+    function getDisplayDateString(offsetDays = 0) {
+      const now = new Date();
+      const kstDate = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+      kstDate.setDate(kstDate.getDate() + offsetDays);
+      return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', weekday: 'short' }).format(kstDate);
+    }
+
+    // 🕒 한국 시간(KST) 기준 00:00 자정 슬라이드 롤오버 로직
+    async function checkDailyReset(serverResetDate, serverData) {
+      const todayStr = getKSTDateString(0);
+      const yesterdayStr = getKSTDateString(-1);
+
       if (serverResetDate && serverResetDate !== todayStr) {
-        slotData = {};
-        userColorMap = {};
+        let newTodaySlots = {};
+        let newTomorrowSlots = {};
+
+        // 하루만 지났을 경우: 기존 tomorrow 데이터를 오늘(today)로 이동
+        if (serverResetDate === yesterdayStr && serverData.slots && serverData.slots.tomorrow) {
+          newTodaySlots = serverData.slots.tomorrow;
+        }
+
+        slotData = { today: newTodaySlots, tomorrow: newTomorrowSlots };
+
         await db.collection("joma_portal").doc("slots_data").set({
-          slots: {},
-          colors: {},
+          slots: slotData,
+          colors: userColorMap,
           resetDate: todayStr,
           lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
         });
       }
     }
 
-    // 🔥 Firestore 실시간 데이터 동기화 리스너 (모든 기기/유저 간 실시간 연동)
+    // 🔥 Firestore 실시간 데이터 동기화 리스너
     function initRealtimeSync() {
       db.collection("joma_portal").doc("slots_data").onSnapshot(async (doc) => {
         if (doc.exists) {
           const serverData = doc.data();
-          const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-          const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+          const todayStr = getKSTDateString(0);
 
-          // 자정 초기화 검사
           if (serverData.resetDate !== todayStr) {
-            await checkDailyReset(serverData.resetDate);
+            await checkDailyReset(serverData.resetDate, serverData);
             return;
           }
 
-          slotData = serverData.slots || {};
+          slotData = serverData.slots || { today: {}, tomorrow: {} };
+          if (!slotData.today) slotData.today = {};
+          if (!slotData.tomorrow) slotData.tomorrow = {};
           userColorMap = serverData.colors || {};
         } else {
-          slotData = {};
-          userColorMap = {};
-          const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-          const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
+          slotData = { today: {}, tomorrow: {} };
+          const todayStr = getKSTDateString(0);
           await db.collection("joma_portal").doc("slots_data").set({
-            slots: {},
+            slots: slotData,
             colors: {},
             resetDate: todayStr,
             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
@@ -428,9 +444,7 @@
     // 🔥 Firestore에 변경 데이터 저장
     async function saveToFirestore() {
       try {
-        const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-        const todayStr = `${nowKST.getFullYear()}-${nowKST.getMonth() + 1}-${nowKST.getDate()}`;
-
+        const todayStr = getKSTDateString(0);
         await db.collection("joma_portal").doc("slots_data").set({
           slots: slotData,
           colors: userColorMap,
@@ -522,67 +536,121 @@
       { id: 'library', name: 'Library', time: '<30mins>', img: 'library.jpg' }
     ];
 
+    // 스케치 형태(보스 -> 오늘/내일 -> AM/PM -> 12시간Grid) 반영 레이아웃
     function initBossTimeline() {
       const container = document.getElementById('boss-schedule-container');
       container.innerHTML = '';
 
+      const todayLabel = getDisplayDateString(0);
+      const tomorrowLabel = getDisplayDateString(1);
+
       bossList.forEach((boss, index) => {
         const row = document.createElement('div');
-        row.className = `flex gap-4 items-center ${index !== 0 ? 'pt-4' : ''}`;
+        row.className = `flex gap-3 items-stretch ${index !== 0 ? 'pt-6' : ''}`;
 
+        // 1열: 보스 프로필
         const profile = `
-          <div class="w-48 shrink-0 flex items-center gap-3 bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
-            <img src="${boss.img}" alt="${boss.name}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm" onerror="this.src='https://placehold.co/100x100/e2e8f0/64748b?text=${boss.id}'">
-            <div class="min-w-0">
-              <div class="font-bold text-slate-800 text-sm truncate" title="${boss.name}">${boss.name}</div>
-              <span class="text-[11px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">${boss.time}</span>
-            </div>
+          <div class="w-36 shrink-0 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 p-3 rounded-xl text-center shadow-sm">
+            <img src="${boss.img}" alt="${boss.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shadow-sm mb-2" onerror="this.src='https://placehold.co/100x100/e2e8f0/64748b?text=${boss.id}'">
+            <div class="font-black text-slate-800 text-sm leading-tight">${boss.name}</div>
+            <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200 mt-1">${boss.time}</span>
           </div>
         `;
 
-        let timeGrid = `
-          <div class="flex-1 space-y-1.5">
-            <div class="flex items-center gap-1.5">
-              <span class="w-8 text-xs font-black text-slate-400 shrink-0">AM</span>
-              <div class="grid grid-cols-12 gap-1 flex-1">
-        `;
+        // 2열: 날짜 & 타임라인 Grid (오늘 / 내일 2개 블록)
+        let scheduleContent = `<div class="flex-1 space-y-3">`;
 
+        // [오늘 날짜 블록 (D-Day)]
+        scheduleContent += `
+          <div class="flex gap-2 items-center bg-slate-50/60 p-2 rounded-xl border border-slate-200">
+            <div class="w-24 shrink-0 text-center font-black text-indigo-700 text-xs bg-indigo-50 border border-indigo-200 py-4 rounded-lg">
+              <div>오늘</div>
+              <div class="text-[10px] text-slate-500 font-normal">${todayLabel}</div>
+            </div>
+            <div class="flex-1 space-y-1.5">
+              <div class="flex items-center gap-1.5">
+                <span class="w-7 text-[11px] font-black text-slate-400 text-center">AM</span>
+                <div class="grid grid-cols-12 gap-1 flex-1">
+        `;
         for (let i = 1; i <= 12; i++) {
-          const key = `${boss.id}-AM-${i}`;
-          timeGrid += `
-            <div onclick="handleSlotClick('${boss.id}', 'AM', ${i})" id="slot-${key}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+          const key = `today_${boss.id}-AM-${i}`;
+          scheduleContent += `
+            <div onclick="handleSlotClick('today', '${boss.id}', 'AM', ${i})" id="slot-${key}" class="h-8 bg-white hover:bg-slate-100 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative shadow-xs">
               <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
               <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
             </div>
           `;
         }
-
-        timeGrid += `
+        scheduleContent += `
+                </div>
               </div>
-            </div>
-
-            <div class="flex items-center gap-1.5">
-              <span class="w-8 text-xs font-black text-slate-400 shrink-0">PM</span>
-              <div class="grid grid-cols-12 gap-1 flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-7 text-[11px] font-black text-slate-400 text-center">PM</span>
+                <div class="grid grid-cols-12 gap-1 flex-1">
         `;
-
         for (let i = 1; i <= 12; i++) {
-          const key = `${boss.id}-PM-${i}`;
-          timeGrid += `
-            <div onclick="handleSlotClick('${boss.id}', 'PM', ${i})" id="slot-${key}" class="h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative">
+          const key = `today_${boss.id}-PM-${i}`;
+          scheduleContent += `
+            <div onclick="handleSlotClick('today', '${boss.id}', 'PM', ${i})" id="slot-${key}" class="h-8 bg-white hover:bg-slate-100 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative shadow-xs">
               <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
               <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
             </div>
           `;
         }
-
-        timeGrid += `
+        scheduleContent += `
+                </div>
               </div>
             </div>
           </div>
         `;
 
-        row.innerHTML = profile + timeGrid;
+        // [내일 날짜 블록 (D+1)]
+        scheduleContent += `
+          <div class="flex gap-2 items-center bg-slate-50/60 p-2 rounded-xl border border-slate-200">
+            <div class="w-24 shrink-0 text-center font-black text-emerald-700 text-xs bg-emerald-50 border border-emerald-200 py-4 rounded-lg">
+              <div>내일</div>
+              <div class="text-[10px] text-slate-500 font-normal">${tomorrowLabel}</div>
+            </div>
+            <div class="flex-1 space-y-1.5">
+              <div class="flex items-center gap-1.5">
+                <span class="w-7 text-[11px] font-black text-slate-400 text-center">AM</span>
+                <div class="grid grid-cols-12 gap-1 flex-1">
+        `;
+        for (let i = 1; i <= 12; i++) {
+          const key = `tomorrow_${boss.id}-AM-${i}`;
+          scheduleContent += `
+            <div onclick="handleSlotClick('tomorrow', '${boss.id}', 'AM', ${i})" id="slot-${key}" class="h-8 bg-white hover:bg-slate-100 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative shadow-xs">
+              <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
+              <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
+            </div>
+          `;
+        }
+        scheduleContent += `
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-7 text-[11px] font-black text-slate-400 text-center">PM</span>
+                <div class="grid grid-cols-12 gap-1 flex-1">
+        `;
+        for (let i = 1; i <= 12; i++) {
+          const key = `tomorrow_${boss.id}-PM-${i}`;
+          scheduleContent += `
+            <div onclick="handleSlotClick('tomorrow', '${boss.id}', 'PM', ${i})" id="slot-${key}" class="h-8 bg-white hover:bg-slate-100 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative shadow-xs">
+              <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-600">${i}</span>
+              <span id="text-${key}" class="text-[9px] font-black truncate w-full hidden"></span>
+            </div>
+          `;
+        }
+        scheduleContent += `
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        scheduleContent += `</div>`;
+
+        row.innerHTML = profile + scheduleContent;
         container.appendChild(row);
       });
 
@@ -590,37 +658,43 @@
     }
 
     function renderSlots() {
-      // 모든 슬롯 초기화 후 다시 그림
-      bossList.forEach(boss => {
-        ['AM', 'PM'].forEach(period => {
-          for (let i = 1; i <= 12; i++) {
-            const key = `${boss.id}-${period}-${i}`;
-            const slotElem = document.getElementById(`slot-${key}`);
-            const textElem = document.getElementById(`text-${key}`);
-            if (slotElem && textElem) {
-              slotElem.style.backgroundColor = '';
-              slotElem.style.borderColor = '';
-              textElem.innerText = '';
-              textElem.classList.add('hidden');
-              slotElem.className = "h-8 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative";
+      // 슬롯 UI 초기화
+      ['today', 'tomorrow'].forEach(dayType => {
+        bossList.forEach(boss => {
+          ['AM', 'PM'].forEach(period => {
+            for (let i = 1; i <= 12; i++) {
+              const key = `${dayType}_${boss.id}-${period}-${i}`;
+              const slotElem = document.getElementById(`slot-${key}`);
+              const textElem = document.getElementById(`text-${key}`);
+              if (slotElem && textElem) {
+                slotElem.style.backgroundColor = '';
+                slotElem.style.borderColor = '';
+                textElem.innerText = '';
+                textElem.classList.add('hidden');
+                slotElem.className = "h-8 bg-white hover:bg-slate-100 border border-slate-200 rounded cursor-pointer transition flex flex-col items-center justify-center px-0.5 text-center group relative shadow-xs";
+              }
             }
-          }
+          });
         });
       });
 
-      // 서버 데이터 반영
-      Object.keys(slotData).forEach(key => {
-        const data = slotData[key];
-        const slotElem = document.getElementById(`slot-${key}`);
-        const textElem = document.getElementById(`text-${key}`);
-        if (slotElem && textElem && data) {
-          const color = getUserColor(data.id);
-          textElem.innerText = data.id;
-          textElem.classList.remove('hidden');
-          textElem.style.color = color.text;
-          slotElem.style.backgroundColor = color.bg;
-          slotElem.style.borderColor = color.border;
-        }
+      // DB 데이터 렌더링 (오늘/내일 구분)
+      ['today', 'tomorrow'].forEach(dayType => {
+        const currentData = slotData[dayType] || {};
+        Object.keys(currentData).forEach(slotKey => {
+          const data = currentData[slotKey];
+          const fullKey = `${dayType}_${slotKey}`;
+          const slotElem = document.getElementById(`slot-${fullKey}`);
+          const textElem = document.getElementById(`text-${fullKey}`);
+          if (slotElem && textElem && data) {
+            const color = getUserColor(data.id);
+            textElem.innerText = data.id;
+            textElem.classList.remove('hidden');
+            textElem.style.color = color.text;
+            slotElem.style.backgroundColor = color.bg;
+            slotElem.style.borderColor = color.border;
+          }
+        });
       });
     }
 
@@ -661,19 +735,21 @@
       textElem.innerText = i18nData[currentLang]['btn_reserve'] || "Reserve";
     }
 
-    function handleSlotClick(bossId, period, hour) {
-      const key = `${bossId}-${period}-${hour}`;
-      const existing = slotData[key];
+    function handleSlotClick(dayType, bossId, period, hour) {
+      const slotKey = `${bossId}-${period}-${hour}`;
+      const fullKey = `${dayType}_${slotKey}`;
+      const dayData = slotData[dayType] || {};
+      const existing = dayData[slotKey];
       const langData = i18nData[currentLang] || i18nData['kor'];
 
       if (existing && existing.id) {
         let inputPw = promptModalReplacement(langData.prompt_enter_pw || "비밀번호를 입력해주세요.");
         if (inputPw === null) return;
 
-        // 🔑 사용자 비밀번호 또는 마스터 비밀번호(1719) 검증
+        // 🔑 사용자 PW 또는 마스터 비밀번호(1719) 검증
         if (inputPw === existing.pw || inputPw === MASTER_PASSWORD) {
           if (confirmModalReplacement(langData.confirm_delete || "예약을 취소하시겠습니까?")) {
-            delete slotData[key];
+            delete slotData[dayType][slotKey];
             saveToFirestore();
           }
         } else {
@@ -687,17 +763,17 @@
         return;
       }
 
-      if (selectedSlots.has(key)) {
-        selectedSlots.delete(key);
-        document.getElementById(`slot-${key}`).style.backgroundColor = '';
-        document.getElementById(`slot-${key}`).style.borderColor = '';
+      if (selectedSlots.has(fullKey)) {
+        selectedSlots.delete(fullKey);
+        document.getElementById(`slot-${fullKey}`).style.backgroundColor = '';
+        document.getElementById(`slot-${fullKey}`).style.borderColor = '';
       } else {
         let userBossCount = 0;
-        Object.keys(slotData).forEach(k => {
-          if (k.startsWith(`${bossId}-`) && slotData[k]?.id === loggedInUser.id) userBossCount++;
+        Object.keys(dayData).forEach(k => {
+          if (k.startsWith(`${bossId}-`) && dayData[k]?.id === loggedInUser.id) userBossCount++;
         });
-        selectedSlots.forEach(k => {
-          if (k.startsWith(`${bossId}-`)) userBossCount++;
+        selectedSlots.forEach(fk => {
+          if (fk.startsWith(`${dayType}_${bossId}-`)) userBossCount++;
         });
 
         if (userBossCount >= 6) {
@@ -705,10 +781,10 @@
           return;
         }
 
-        selectedSlots.add(key);
+        selectedSlots.add(fullKey);
         const color = getUserColor(loggedInUser.id);
-        document.getElementById(`slot-${key}`).style.backgroundColor = color.bg;
-        document.getElementById(`slot-${key}`).style.borderColor = color.border;
+        document.getElementById(`slot-${fullKey}`).style.backgroundColor = color.bg;
+        document.getElementById(`slot-${fullKey}`).style.borderColor = color.border;
       }
     }
 
@@ -720,8 +796,13 @@
         return;
       }
 
-      selectedSlots.forEach(key => {
-        slotData[key] = { id: loggedInUser.id, pw: loggedInUser.pw };
+      selectedSlots.forEach(fullKey => {
+        const parts = fullKey.split('_');
+        const dayType = parts[0];
+        const slotKey = parts[1];
+
+        if (!slotData[dayType]) slotData[dayType] = {};
+        slotData[dayType][slotKey] = { id: loggedInUser.id, pw: loggedInUser.pw };
       });
 
       saveToFirestore();
