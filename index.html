@@ -543,6 +543,7 @@
 
       const todayLabel = getDisplayDateString(0);
       const tomorrowLabel = getDisplayDateString(1);
+      const langData = i18nData[currentLang] || i18nData['kor'];
 
       bossList.forEach((boss, index) => {
         const row = document.createElement('div');
@@ -564,7 +565,7 @@
         scheduleContent += `
           <div class="flex gap-2 items-center bg-slate-50/60 p-2 rounded-xl border border-slate-200">
             <div class="w-24 shrink-0 text-center font-black text-indigo-700 text-xs bg-indigo-50 border border-indigo-200 py-4 rounded-lg">
-              <div>오늘</div>
+              <div id="lbl-today-${boss.id}">${langData.lbl_today || '오늘'}</div>
               <div class="text-[10px] text-slate-500 font-normal">${todayLabel}</div>
             </div>
             <div class="flex-1 space-y-1.5">
@@ -608,7 +609,7 @@
         scheduleContent += `
           <div class="flex gap-2 items-center bg-slate-50/60 p-2 rounded-xl border border-slate-200">
             <div class="w-24 shrink-0 text-center font-black text-emerald-700 text-xs bg-emerald-50 border border-emerald-200 py-4 rounded-lg">
-              <div>내일</div>
+              <div id="lbl-tomorrow-${boss.id}">${langData.lbl_tomorrow || '내일'}</div>
               <div class="text-[10px] text-slate-500 font-normal">${tomorrowLabel}</div>
             </div>
             <div class="flex-1 space-y-1.5">
@@ -861,7 +862,9 @@
         limit_alert: "'{name}' has already reached the 6-hour limit for this boss.",
         prompt_enter_pw: "Enter password to cancel reservation:",
         confirm_delete: "Are you sure you want to cancel this reservation?",
-        alert_pw_wrong: "Incorrect password."
+        alert_pw_wrong: "Incorrect password.",
+        lbl_today: "Today",
+        lbl_tomorrow: "Tomorrow"
       },
       php: {
         subtitle: "Mga pangunahing link para sa guild operation at attendance",
@@ -895,7 +898,9 @@
         limit_alert: "Si '{name}' ay umabot na sa 6 oras sa boss na ito.",
         prompt_enter_pw: "Ilagay ang password:",
         confirm_delete: "Gusto mo bang kanselahin?",
-        alert_pw_wrong: "Maling password."
+        alert_pw_wrong: "Maling password.",
+        lbl_today: "Ngayon",
+        lbl_tomorrow: "Bukas"
       },
       idn: {
         subtitle: "Kumpulan tautan utama untuk operasional guild & kehadiran",
@@ -929,7 +934,9 @@
         limit_alert: "'{name}' sudah mencapai batas 6 jam untuk boss ini.",
         prompt_enter_pw: "Masukkan password:",
         confirm_delete: "Batalkan reservasi ini?",
-        alert_pw_wrong: "Password salah."
+        alert_pw_wrong: "Password salah.",
+        lbl_today: "Hari Ini",
+        lbl_tomorrow: "Besok"
       },
       chn: {
         subtitle: "公会运营及考勤签到主要链接",
@@ -963,7 +970,9 @@
         limit_alert: "'{name}' 玩家在该Boss已达到6小时上限。",
         prompt_enter_pw: "请输入密码以取消预约：",
         confirm_delete: "确定要取消该预约吗？",
-        alert_pw_wrong: "密码错误。"
+        alert_pw_wrong: "密码错误。",
+        lbl_today: "今天",
+        lbl_tomorrow: "明天"
       }
     };
 
@@ -976,6 +985,14 @@
         if (i18nData[lang] && i18nData[lang][key]) {
           el.innerHTML = i18nData[lang][key];
         }
+      });
+
+      // "오늘" / "내일" 라벨 동적 언어 반영
+      bossList.forEach(boss => {
+        const todayElem = document.getElementById(`lbl-today-${boss.id}`);
+        const tomorrowElem = document.getElementById(`lbl-tomorrow-${boss.id}`);
+        if (todayElem) todayElem.innerText = i18nData[lang]['lbl_today'] || 'Today';
+        if (tomorrowElem) tomorrowElem.innerText = i18nData[lang]['lbl_tomorrow'] || 'Tomorrow';
       });
 
       const mainBtnText = document.getElementById('mainActionText');
