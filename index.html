@@ -116,7 +116,7 @@
           <h2 class="text-lg font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
             <span>⏰</span> Mini-Bosses Schedule (Today & Tomorrow)
           </h2>
-          <!-- 🕒 KST Day, Month 시:분:초 AM/PM -->
+          <!-- 🕒 KST 실시간 시계 -->
           <div class="bg-slate-900 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shadow-inner flex items-center gap-1.5 border border-slate-700">
             <span>KST</span>
             <span id="kstClock">Thu, Nov 5 00:00:00 AM</span>
@@ -124,7 +124,7 @@
         </div>
         
         <div class="flex items-center gap-3">
-          <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold" data-i18n="max_notice">Max 6 Hours per User (KST Reset 00:00)</span>
+          <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full font-bold" data-i18n="max_notice">Max 6 Total Hours per User (KST Reset 00:00)</span>
           <button id="mainActionButton" onclick="handleMainAction()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
             <span>📝</span> <span id="mainActionText" data-i18n="btn_checkin">Check In</span>
           </button>
@@ -358,7 +358,7 @@
     let slotData = { today: {}, tomorrow: {} };
     let userColorMap = {};
 
-    // 🕒 KST 실시간 날짜/시계 (KST Day, Month 시:분:초 AM/PM)
+    // 🕒 KST 실시간 날짜/시계
     function updateKSTClock() {
       const now = new Date();
       const dateOptions = { timeZone: 'Asia/Seoul', weekday: 'short', month: 'short', day: 'numeric' };
@@ -395,7 +395,6 @@
         let newTodaySlots = {};
         let newTomorrowSlots = {};
 
-        // 하루만 지났을 경우: 기존 tomorrow 데이터를 오늘(today)로 이동
         if (serverResetDate === yesterdayStr && serverData.slots && serverData.slots.tomorrow) {
           newTodaySlots = serverData.slots.tomorrow;
         }
@@ -536,7 +535,6 @@
       { id: 'library', name: 'Library', time: '<30mins>', img: 'library.jpg' }
     ];
 
-    // 스케치 형태(보스 -> 오늘/내일 -> AM/PM -> 12시간Grid) 반영 레이아웃
     function initBossTimeline() {
       const container = document.getElementById('boss-schedule-container');
       container.innerHTML = '';
@@ -549,7 +547,6 @@
         const row = document.createElement('div');
         row.className = `flex gap-3 items-stretch ${index !== 0 ? 'pt-6' : ''}`;
 
-        // 1열: 보스 프로필
         const profile = `
           <div class="w-36 shrink-0 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 p-3 rounded-xl text-center shadow-sm">
             <img src="${boss.img}" alt="${boss.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shadow-sm mb-2" onerror="this.src='https://placehold.co/100x100/e2e8f0/64748b?text=${boss.id}'">
@@ -558,7 +555,6 @@
           </div>
         `;
 
-        // 2열: 날짜 & 타임라인 Grid (오늘 / 내일 2개 블록)
         let scheduleContent = `<div class="flex-1 space-y-3">`;
 
         // [오늘 날짜 블록 (D-Day)]
@@ -659,7 +655,6 @@
     }
 
     function renderSlots() {
-      // 슬롯 UI 초기화
       ['today', 'tomorrow'].forEach(dayType => {
         bossList.forEach(boss => {
           ['AM', 'PM'].forEach(period => {
@@ -679,7 +674,6 @@
         });
       });
 
-      // DB 데이터 렌더링 (오늘/내일 구분)
       ['today', 'tomorrow'].forEach(dayType => {
         const currentData = slotData[dayType] || {};
         Object.keys(currentData).forEach(slotKey => {
@@ -747,7 +741,6 @@
         let inputPw = promptModalReplacement(langData.prompt_enter_pw || "비밀번호를 입력해주세요.");
         if (inputPw === null) return;
 
-        // 🔑 사용자 PW 또는 마스터 비밀번호(1719) 검증
         if (inputPw === existing.pw || inputPw === MASTER_PASSWORD) {
           if (confirmModalReplacement(langData.confirm_delete || "예약을 취소하시겠습니까?")) {
             delete slotData[dayType][slotKey];
@@ -769,15 +762,20 @@
         document.getElementById(`slot-${fullKey}`).style.backgroundColor = '';
         document.getElementById(`slot-${fullKey}`).style.borderColor = '';
       } else {
-        let userBossCount = 0;
+        // 🔄 [통합 6시간 검증 로직] 해당 날짜(today 또는 tomorrow)에 유저가 예약한 모든 보스 슬롯 합산
+        let totalUserCount = 0;
+        
+        // 1. 이미 DB에 저장되어 있는 해당 날짜의 유저 예약 수
         Object.keys(dayData).forEach(k => {
-          if (k.startsWith(`${bossId}-`) && dayData[k]?.id === loggedInUser.id) userBossCount++;
-        });
-        selectedSlots.forEach(fk => {
-          if (fk.startsWith(`${dayType}_${bossId}-`)) userBossCount++;
+          if (dayData[k]?.id === loggedInUser.id) totalUserCount++;
         });
 
-        if (userBossCount >= 6) {
+        // 2. 현재 선택 창(selectedSlots)에서 방금 추가하려는 해당 날짜 예약 수
+        selectedSlots.forEach(fk => {
+          if (fk.startsWith(`${dayType}_`)) totalUserCount++;
+        });
+
+        if (totalUserCount >= 6) {
           showCustomAlert(langData.limit_alert.replace('{name}', loggedInUser.id));
           return;
         }
@@ -846,7 +844,7 @@
         ecn_loot: "획득 전리품 및 아이템 목록",
         ecn_price: "아이템 별 시세 기준표",
         cat_memories: "Our Memories (우리의 추억)",
-        max_notice: "Max 6 Hours per User (KST Reset 00:00)",
+        max_notice: "Max 6 Total Hours per User (KST Reset 00:00)",
         btn_checkin: "Check In",
         btn_reserve: "Reserve",
         modal_checkin_title: "Check In Login",
@@ -859,12 +857,12 @@
         alert_checked_in: "Checked in successfully!",
         alert_reserved: "Reservation completed successfully!",
         alert_no_selection: "Please select time slots to reserve.",
-        limit_alert: "'{name}' has already reached the 6-hour limit for this boss.",
+        limit_alert: "'{name}' 님은 해당 날짜에 모든 보스 합산 총 6시간(6슬롯)까지만 예약할 수 있습니다.",
         prompt_enter_pw: "Enter password to cancel reservation:",
         confirm_delete: "Are you sure you want to cancel this reservation?",
         alert_pw_wrong: "Incorrect password.",
-        lbl_today: "Today",
-        lbl_tomorrow: "Tomorrow"
+        lbl_today: "오늘",
+        lbl_tomorrow: "내일"
       },
       php: {
         subtitle: "Mga pangunahing link para sa guild operation at attendance",
@@ -882,7 +880,7 @@
         ecn_loot: "Listahan ng mga nakuhang loot at gamit",
         ecn_price: "Talahanayan ng presyo ng mga item",
         cat_memories: "Our Memories (Ating Mga Alaala)",
-        max_notice: "Max 6 oras bawat miyembro (Reset sa 00:00 KST)",
+        max_notice: "Max 6 Total Hours per User (KST Reset 00:00)",
         btn_checkin: "Check In",
         btn_reserve: "Reserve",
         modal_checkin_title: "Login sa Check In",
@@ -895,7 +893,7 @@
         alert_checked_in: "Matagumpay na nag-check in!",
         alert_reserved: "Nakumpleto na ang reservation!",
         alert_no_selection: "Pumili ng oras para sa reservation.",
-        limit_alert: "Si '{name}' ay umabot na sa 6 oras sa boss na ito.",
+        limit_alert: "Si '{name}' ay umabot na sa limitasyon na 6 na oras para sa araw na ito.",
         prompt_enter_pw: "Ilagay ang password:",
         confirm_delete: "Gusto mo bang kanselahin?",
         alert_pw_wrong: "Maling password.",
@@ -918,7 +916,7 @@
         ecn_loot: "Daftar item & hasil jarahan",
         ecn_price: "Tabel standar harga item",
         cat_memories: "Our Memories (Kenangan Kita)",
-        max_notice: "Maks 6 Jam per User (Reset KST 00:00)",
+        max_notice: "Max 6 Total Hours per User (KST Reset 00:00)",
         btn_checkin: "Check In",
         btn_reserve: "Reserve",
         modal_checkin_title: "Login Check In",
@@ -931,7 +929,7 @@
         alert_checked_in: "Berhasil check in!",
         alert_reserved: "Reservasi berhasil diselesaikan!",
         alert_no_selection: "Pilih waktu untuk reservasi.",
-        limit_alert: "'{name}' sudah mencapai batas 6 jam untuk boss ini.",
+        limit_alert: "'{name}' sudah mencapai batas total 6 jam untuk hari ini.",
         prompt_enter_pw: "Masukkan password:",
         confirm_delete: "Batalkan reservasi ini?",
         alert_pw_wrong: "Password salah.",
@@ -940,7 +938,7 @@
       },
       chn: {
         subtitle: "公会运营及考勤签到主要链接",
-        notice: '如果考勤填错了，请联系 <a href="https://open.kakao.com/me/TWOMSEA" target="_blank" class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black underline hover:bg-amber-300 transition">"Sea"</a>。请勿重复签到！',
+        notice: '如果考勤填错了，请联系 <a href="https://open.kakao.com/me/TWOMSEA" target="_blank" class="bg-amber-200 border border-amber-300 px-2 py-0.5 rounded-md text-amber-950 font-black underline hover:bg-amber-300 transition">"Sea"</a>。请勿重复签定！',
         rule_op: "公会运营规则及基本系统",
         rule_inotia: "Joma & MMA Inotia 分配规则",
         rule_dice: "Unique装备 R点/掷骰 资格条件",
@@ -954,7 +952,7 @@
         ecn_loot: "战利品及获得的物品清单",
         ecn_price: "各物品价格标准表",
         cat_memories: "Our Memories (我们的回忆)",
-        max_notice: "每人最多6小时 (KST 00:00重置)",
+        max_notice: "每人每天最多总共6小时 (KST 00:00重置)",
         btn_checkin: "Check In",
         btn_reserve: "Reserve",
         modal_checkin_title: "签到登录",
@@ -967,7 +965,7 @@
         alert_checked_in: "签到成功！",
         alert_reserved: "预约已完成！",
         alert_no_selection: "请选择要预约的时间段。",
-        limit_alert: "'{name}' 玩家在该Boss已达到6小时上限。",
+        limit_alert: "'{name}' 玩家当天所有Boss合计已达到6小时上限。",
         prompt_enter_pw: "请输入密码以取消预约：",
         confirm_delete: "确定要取消该预约吗？",
         alert_pw_wrong: "密码错误。",
@@ -987,7 +985,6 @@
         }
       });
 
-      // "오늘" / "내일" 라벨 동적 언어 반영
       bossList.forEach(boss => {
         const todayElem = document.getElementById(`lbl-today-${boss.id}`);
         const tomorrowElem = document.getElementById(`lbl-tomorrow-${boss.id}`);
